@@ -1,6 +1,7 @@
 export interface Config {
 	token: string;
 	owners: Array<string>;
+	public: boolean,
 	zipline?: ZiplineConfig;
 	naviac?: NaviacConfig;
 	web?: WebConfig;

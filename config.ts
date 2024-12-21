@@ -3,6 +3,7 @@ import type { Config } from "./src/types/config";
 export default {
 	token: process.env.BOT_TOKEN,
 	owners: process.env.OWNERS?.split(",") || [],
+	public: process.env.PUBLIC === "true" || false,
 
 	zipline: {
 		token: process.env.ZIPLINE_TOKEN,

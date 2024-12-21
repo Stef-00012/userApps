@@ -1,3 +1,7 @@
+import type { Client } from "../../structures/DiscordClient";
+import type { Routes } from "../../types/web";
+import type { Router } from "express";
+
 import DashboardHomeRoute from "./dashboard/home";
 import DashboardCommandsRoute from "./dashboard/commands";
 import DashboardPermissionsRoute from "./dashboard/permissions";
@@ -11,10 +15,11 @@ import UnautorizedRoute from "./auth/unauthorized";
 
 import TagPreviewRoute from "./tagPreview/embedBuilder";
 
-import type { Client } from "../../structures/DiscordClient";
+import InviteRoute from "./misc/invite";
 
-export default function (client: Client) {
-	return {
+
+export default function (client: Client): Routes {
+	const routes: Routes = {
 		auth: {
 			dashboardHome: DashboardHomeRoute(client),
 			dashboardCommands: DashboardCommandsRoute(client),
@@ -31,4 +36,10 @@ export default function (client: Client) {
 			tagPreview: TagPreviewRoute(client),
 		},
 	};
+
+	if (client.config.public) {
+		routes.noAuth.invite = InviteRoute(client)
+	}
+
+	return routes;
 }
