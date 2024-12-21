@@ -1,8 +1,9 @@
 import type { Client } from "../../structures/DiscordClient";
 import type { Command } from "../../types/command";
 import {
-	EmbedBuilder,
 	type UserContextMenuCommandInteraction,
+	AttachmentBuilder,
+	EmbedBuilder,
 } from "discord.js";
 
 export default {
@@ -10,6 +11,7 @@ export default {
 	requires: [],
 
 	async execute(client: Client, int: UserContextMenuCommandInteraction) {
+		const plainMemberJSON = JSON.stringify(int.targetMember, null, 2)
 		const memberJSON = JSON.stringify(int.targetMember, null, 2).replaceAll(
 			"`",
 			"\\`",
@@ -23,8 +25,13 @@ export default {
 			}\n\`\`\``,
 		);
 
+		const attachment = new AttachmentBuilder(Buffer.from(plainMemberJSON), {
+			name: "member-data.json"
+		})
+
 		await int.reply({
 			embeds: [embed],
+			files: [attachment],
 			ephemeral: true,
 		});
 	},
