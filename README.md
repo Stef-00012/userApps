@@ -1,13 +1,14 @@
 # Installation
 
 1. Run `git clone https://github.com/Stef-00012/Discord-User-Installed-Apps`.
-2. Fill the environment variables in the compose file (See [#Config](https://github.com/Stef-00012/Discord-User-Installed-Apps/#config).
+2. Fill the environment variables in the compose file (See [#Config](https://github.com/Stef-00012/Discord-User-Installed-Apps/#config)).
 3. Run `docker compose up -d`.
 
 # Config
 
 - `BOT_TOKEN`: Your Discord bot token.
 - `OWNERS`: An list of Discord users allowed to use owner-only commands (split by `,`). Example: `123,456,789`.
+- `PUBLIC`: Whetever the bot is public, if so, when the web is enabled, a `/invite` route is created that redirects to the bot's invite.
 - `ZIPLINE_TOKEN`: Your Zipline token. [^1]
 - `ZIPLINE_URL`: Your Zipline hostname. [^1]
 - `ZIPLINE_CHUNK_SIZE`: File chunk size, for chunked uploads (in mb). [^1]
