@@ -8,7 +8,7 @@ import express, {
 export default function (client: Client) {
     const router = express.Router()
 
-    router.get('/invite', (req: Request, res: Response, next: NextFunction) => {
+    router.get('/invite', (req: Request, res: Response, next: NextFunction): any => {
         res.redirect(`https://discord.com/oauth2/authorize?client_id=${client.user?.id}`)
     })
 

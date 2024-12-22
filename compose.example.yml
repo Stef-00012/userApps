@@ -9,20 +9,30 @@ services:
     environment:
       - BOT_TOKEN=
       - OWNERS= # user IDs split by "," example: 123,456,789
+      - PUBLIC=false
+
       - ZIPLINE_TOKEN=
       - ZIPLINE_URL=
       - ZIPLINE_CHUNK_SIZE=20
       - ZIPLINE_MAX_FILE_SIZE=1024
+
       - NAVIAC_USERNAME=
       - NAVIAC_TOKEN=
+
       - DASHBOARD_ENABLED=true
       - DASHBOARD_HOSTNAME=localhost
       - DASHBOARD_SECURE=false
       - DASHBOARD_URL_KEEP_PORT=true
+
       - DISCORD_CLIENT_ID=
       - DISCORD_CLIENT_SECRET=
       - DISCORD_REDIRECT_URI=
+
       - JWT_SECRET=
+
+      - DISCORD_WEBHOOK_ENABLED=true
+      - DISCORD_WEBHOOK_PUBLIC_KEY=
+      - DISCORD_WEBHOOK_NOTIFICATION_URLS= # AppRise compatible URLs (see the README.md for a link to a list of valid URLs) split by "," example: ntfys://token@hostname,discord://id/token
     volumes:
       - ./data:/bot/data
       - ./permissions:/bot/src/data/permissions

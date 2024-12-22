@@ -27,6 +27,7 @@ export interface WebConfig {
 	keepPort: boolean;
 	auth: AuthConfig;
 	jwt: JwtConfig;
+	discordWebhook?: DiscordWebhookConfig;
 }
 
 export interface AuthConfig {
@@ -38,4 +39,16 @@ export interface AuthConfig {
 
 export interface JwtConfig {
 	secret: string;
+}
+
+export interface DiscordWebhookConfig {
+	enabled: boolean;
+	public_key: string;
+	message: DiscordWebhookAppriseMessageConfig;
+	urls: Array<string>
+}
+
+export interface DiscordWebhookAppriseMessageConfig {
+	title: string;
+	body: string;
 }

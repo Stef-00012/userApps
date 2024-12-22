@@ -16,6 +16,7 @@ import UnautorizedRoute from "./auth/unauthorized";
 import TagPreviewRoute from "./tagPreview/embedBuilder";
 
 import InviteRoute from "./misc/invite";
+import DiscordWebhook from "./misc/discordWebhook";
 
 
 export default function (client: Client): Routes {
@@ -36,6 +37,10 @@ export default function (client: Client): Routes {
 			tagPreview: TagPreviewRoute(client),
 		},
 	};
+
+	if (client.config.web?.discordWebhook?.enabled) {
+		routes.noAuth.discordWebhook = DiscordWebhook(client)
+	}
 
 	if (client.config.public) {
 		routes.noAuth.invite = InviteRoute(client)
