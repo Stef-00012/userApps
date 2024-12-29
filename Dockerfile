@@ -29,16 +29,7 @@ RUN apt update && apt install -y \
     g++
 
 # Install Python3
-RUN wget https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz \
-    && tar -xf Python-3.11.*.tgz \
-    && cd Python-3.11.9 \
-    && ./configure --enable-optimizations \
-    && make -j $(nproc) \
-    && make altinstall \
-    && cd .. \
-    && rm -rf Python-3.11.9 \
-    && rm Python-3.11.*.tgz \
-    && wget https://www.python.org/ftp/python/3.12.3/Python-3.12.3.tgz \
+RUN wget https://www.python.org/ftp/python/3.12.3/Python-3.12.3.tgz \
     && tar -xf Python-3.12.*.tgz \
     && cd Python-3.12.3 \
     && ./configure --enable-optimizations \
@@ -49,8 +40,7 @@ RUN wget https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz \
     && rm Python-3.12.*.tgz
 
 # Update pip
-RUN pip3.11 install --upgrade pip \
-    && pip3.12 install --upgrade pip
+RUN pip3.12 install --upgrade pip
 
 # Install AppRise
 RUN pip install apprise
