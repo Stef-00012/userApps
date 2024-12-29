@@ -6,7 +6,6 @@ src/data/permissions
 shCmds
 /data
 /permissions
-compose.yml
 bun.lockb
 .env
 tmp.ts

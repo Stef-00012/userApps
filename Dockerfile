@@ -55,6 +55,10 @@ RUN pip3.11 install --upgrade pip \
 # Install AppRise
 RUN pip install apprise
 
+# Add pip install path to PATH
+# (idk why without this it gave errors when using apprise through `execSync`)
+ENV PATH="${PATH}:/usr/local/bin"
+
 # Install fastfetch
 RUN wget https://github.com/fastfetch-cli/fastfetch/releases/latest/download/fastfetch-linux-amd64.deb -O /tmp/fastfetch.deb && \
     apt -y install -f /tmp/fastfetch.deb && \

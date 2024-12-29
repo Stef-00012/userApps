@@ -29,6 +29,7 @@ export default {
 		try {
 			output = execSync(cmd).toString().trim();
 		} catch (e) {
+			console.log(e)
 			let error = e.toString().trim();
 
 			if (error.length > 1000) {

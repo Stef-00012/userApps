@@ -1,8 +1,9 @@
 # Installation
 
-1. Run `git clone https://github.com/Stef-00012/Discord-User-Installed-Apps`.
-2. Fill the environment variables in the compose file (See [#Config](https://github.com/Stef-00012/Discord-User-Installed-Apps/#config)).
-3. Run `docker compose up -d`.
+1. Run `git clone https://github.com/Stef-00012/userApps`.
+2. Open the folder, `cd userApps`.
+3. rename `.env.example` to `.env` and fill the environment variables (See [#Config](https://github.com/Stef-00012/Discord-User-Installed-Apps/#config))
+4. Run `docker compose up -d`.
 
 # Config
 

@@ -89,7 +89,7 @@ export default {
 							},
 						});
 
-					await interaction.reply({
+					return await interaction.reply({
 						content: `Successfully created/updated the tag "${tagName}" with${
 							tagData.embeds?.length > 0
 								? ` ${tagData.embeds.length} embeds and`
