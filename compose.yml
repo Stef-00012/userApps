@@ -1,4 +1,20 @@
 services:
+  apprise-api:
+    container_name: apprise-api
+    ports:
+      - 8000:8000
+    environment:
+      - PUID=0
+      - PGID=0
+      - APPRISE_STATEFUL_MODE=simple
+      - APPRISE_WORKER_COUNT=1
+      - APPRISE_DEFAULT_THEME=dark
+    volumes:
+      - ./apprise/config:/config
+      - ./apprise/plugin:/plugin
+      - ./apprise/attach:/attach
+    image: caronc/apprise:latest
+
   bot:
     # image: stefdp/discord-user-apps
     ports:
@@ -8,6 +24,10 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      - APPRISE_URL=http://apprise-api:8000
     volumes:
       - ./data:/bot/data
       - ./permissions:/bot/src/data/permissions
+    depends_on:
+      - apprise-api

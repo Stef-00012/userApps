@@ -1,5 +1,5 @@
 import type { Client } from "../../../structures/DiscordClient";
-import { execSync } from "node:child_process";
+import axios from "axios";
 import nacl from "tweetnacl";
 import type {
 	DiscordWebhookBody,
@@ -66,14 +66,22 @@ export default function (client: Client) {
 					time: body.event.timestamp,
 				});
 
-				const appriseCommand = `apprise -vv --title "${title}" --body "${message}" "${urls.join(
-					'" "',
-				)}"`;
-
 				try {
-					execSync(appriseCommand);
-				} catch(e) {
-					console.log(e)
+					await axios.post(
+						`${process.env.APPRISE_URL}/notify`,
+						{
+							urls,
+							title,
+							body: message,
+						},
+						{
+							headers: {
+								"Content-Type": "application/json",
+							},
+						},
+					);
+				} catch (e) {
+					console.log(e);
 				}
 			}
 		},
@@ -90,6 +98,5 @@ function replaceTemplate(
 		.replaceAll("{{user}}", config.user)
 		.replaceAll("{{user.id}}", config.userId)
 		.replaceAll("{{bot}}", config.bot)
-		.replaceAll("{{time}}", new Date(config.time).toLocaleString())
-		.replaceAll('"', '\\"');
+		.replaceAll("{{time}}", new Date(config.time).toLocaleString());
 }
