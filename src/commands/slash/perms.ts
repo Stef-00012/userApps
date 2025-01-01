@@ -27,7 +27,7 @@ module.exports = {
 	async execute(client: Client, int: ChatInputCommandInteraction) {
 		const subcommand = int.options.getSubcommand();
 
-		const subcommandData = (await import(`./perms/${subcommand}.js`)).Default;
+		const subcommandData = (await import(`./perms/${subcommand}`)).default;
 
 		await subcommandData(client, int);
 	},

@@ -14,7 +14,7 @@ export default {
 		if (subcommandGroup) path += `${subcommandGroup}/`;
 		path += subcommand;
 
-		const subcommandData = (await import(`./ptero/${path}.js`)).default;
+		const subcommandData = (await import(`./ptero/${path}`)).default;
 
 		await subcommandData(client, int);
 	},

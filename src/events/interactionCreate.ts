@@ -57,6 +57,8 @@ export default async function (client: Client, int: Interaction) {
 		try {
 			await cmd.execute(client, int);
 		} catch (e) {
+			console.log(e);
+
 			if (e.code !== 10062) {
 				if (int.deferred) {
 					int.editReply({

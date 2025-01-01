@@ -107,8 +107,7 @@ export default {
 	async execute(client: Client, int: ChatInputCommandInteraction) {
 		const subcommand = int.options.getSubcommand();
 
-		const subcommandData = (await import(`./minecraft/${subcommand}.js`))
-			.Default;
+		const subcommandData = (await import(`./minecraft/${subcommand}`)).default;
 
 		await subcommandData(client, int);
 	},

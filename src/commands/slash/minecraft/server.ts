@@ -131,6 +131,7 @@ export default async function (
 				});
 			} catch (e) {
 				console.log(e);
+				
 				await int.editReply({
 					content: "Something went wrong...",
 				});

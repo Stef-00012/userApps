@@ -36,7 +36,7 @@ export default {
 	async execute(client: Client, int: ChatInputCommandInteraction) {
 		const subcommand = int.options.getSubcommand();
 
-		const subcommandData = (await import(`./tag/${subcommand}.js`)).default;
+		const subcommandData = (await import(`./tag/${subcommand}`)).default;
 
 		await subcommandData(client, int);
 	},
