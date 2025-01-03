@@ -491,12 +491,6 @@ export default [
 				description: "Get the skin of a player",
 				options: [
 					{
-						name: "player",
-						description: "The player name or UUID",
-						type: ApplicationCommandOptionType.String,
-						required: true,
-					},
-					{
 						name: "render-type",
 						description: "How to render the player skin",
 						type: ApplicationCommandOptionType.String,
@@ -510,6 +504,40 @@ export default [
 						autocomplete: true,
 						required: true,
 					},
+					{
+						name: "player",
+						description: "he player name or UUID (prefix with . for Bedrock)",
+						type: ApplicationCommandOptionType.String,
+						required: false,
+					},
+					{
+						name: "skin-url",
+						description: "The URL to a minecraft skin",
+						type: ApplicationCommandOptionType.String,
+						required: false,
+					},
+					{
+						name: "skin-type",
+						description: "The player skin type (default: wide)",
+						type: ApplicationCommandOptionType.String,
+						choices: [
+							{
+								name: "Slim",
+								value: "slim",
+							},
+							{
+								name: "Wide",
+								value: "wide",
+							},
+						],
+						required: false
+					},
+					// {
+					// 	name: "bedrock",
+					// 	description: "If the player is a bedrock player",
+					// 	type: ApplicationCommandOptionType.Boolean,
+					// 	required: false,
+					// }
 				],
 			},
 		],
