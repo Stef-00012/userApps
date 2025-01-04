@@ -1048,6 +1048,11 @@ export default [
 				type: ApplicationCommandOptionType.Subcommand,
 				description: "Get a joke of Gary",
 			},
+			{
+				name: "goober",
+				type: ApplicationCommandOptionType.Subcommand,
+				description: "Get an image of Goober",
+			},
 		],
 	},
 	{
