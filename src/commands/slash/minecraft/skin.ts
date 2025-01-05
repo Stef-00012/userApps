@@ -1,4 +1,4 @@
-import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
+import { type ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from "discord.js";
 import {
 	avaibleCropTypes,
 	customSkinsConfig,
@@ -32,7 +32,7 @@ export default async function (
 	if (skinUrl && !urlRegex.test(skinUrl))
 		return await int.reply({
 			content: "This skin URL is not a valid URL",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	const urlParams = new URLSearchParams({

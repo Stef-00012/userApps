@@ -118,5 +118,17 @@ export const customSkinsConfig: {
             y: "21.35",
             z: "-8.27"
         },
+    },
+    tpose: {
+        cameraPosition: {
+            x: "20.87",
+            y: "35.99",
+            z: "-62.21"
+        },
+        cameraFocalPoint: {
+            x: "-2.44",
+            y: "17.65",
+            z: "3.04"
+        }
     }
 };

@@ -30,7 +30,8 @@ export type RenderType =
     | "ornament"
     | "skin"
     | "profile"
-    | "sitting";
+    | "sitting"
+    | "tpose";
 
 export interface SkinConfig {
     cameraPosition?: CameraPosition;
