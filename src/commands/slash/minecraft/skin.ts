@@ -1,5 +1,8 @@
 import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
-import { avaibleCropTypes, customSkinsConfig } from "../../../data/constants/minecraftSkin";
+import {
+	avaibleCropTypes,
+	customSkinsConfig,
+} from "../../../data/constants/minecraftSkin";
 import type { Client } from "../../../structures/DiscordClient";
 import type { SkinType } from "../../../types/minecraftSkin";
 
@@ -10,9 +13,10 @@ export default async function (
 	let renderType = int.options.getString("render-type", true);
 	const cropType = int.options.getString("crop-type", true);
 
-	const skinType = int.options.getString("skin-type", false) as SkinType || "wide"
-	
-	const defaultSkin = skinType === "wide" ? "MHF_Steve" : "MHF_Alex"
+	const skinType =
+		(int.options.getString("skin-type", false) as SkinType) || "wide";
+
+	const defaultSkin = skinType === "wide" ? "MHF_Steve" : "MHF_Alex";
 
 	const skinUrl = int.options.getString("skin-url", false);
 	const player = int.options.getString("player", false) || defaultSkin;
@@ -25,28 +29,38 @@ export default async function (
 			ephemeral: true,
 		});
 
-	if (skinUrl && !urlRegex.test(skinUrl)) return await int.reply({
-		content: "This skin URL is not a valid URL",
-		ephemeral: true
-	});
+	if (skinUrl && !urlRegex.test(skinUrl))
+		return await int.reply({
+			content: "This skin URL is not a valid URL",
+			ephemeral: true,
+		});
 
 	const urlParams = new URLSearchParams({
-		skinType
-	})
+		skinType,
+	});
 
 	if (customSkinsConfig[renderType]) {
 		const skinConfig = customSkinsConfig[renderType];
-		renderType = "custom"
 
-		const url = `${global.baseUrl}/skinModels/${renderType}`
+		const url = `${global.baseUrl}/skinModels/${renderType}`;
 
 		urlParams.append("wideModel", `${url}/wide.obj`);
 		urlParams.append("slimModel", `${url}/slim.obj`);
-		if (skinConfig.cameraPosition) urlParams.append("cameraPosition", JSON.stringify(skinConfig.cameraPosition));
-		if (skinConfig.cameraFocalPoint) urlParams.append("cameraFocalPoint", JSON.stringify(skinConfig.cameraFocalPoint));
+		if (skinConfig.cameraPosition)
+			urlParams.append(
+				"cameraPosition",
+				JSON.stringify(skinConfig.cameraPosition),
+			);
+		if (skinConfig.cameraFocalPoint)
+			urlParams.append(
+				"cameraFocalPoint",
+				JSON.stringify(skinConfig.cameraFocalPoint),
+			);
+
+		renderType = "custom";
 	}
 
-	if (skinUrl) urlParams.append("skinUrl", skinUrl)
+	if (skinUrl) urlParams.append("skinUrl", skinUrl);
 
 	const url = `https://starlightskins.lunareclipse.studio/render/${renderType}/${player}/${cropType}?${urlParams.toString()}`;
 
@@ -69,7 +83,7 @@ export default async function (
 			},
 		]);
 
-	if (skinUrl) embed.setURL(skinUrl)
+	if (skinUrl) embed.setURL(skinUrl);
 
 	await int.reply({
 		embeds: [embed],
