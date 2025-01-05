@@ -1,4 +1,4 @@
-import type { CropType, RenderType } from "../../types/lunarEclypse";
+import type { CropType, RenderType, SkinConfig } from "../../types/minecraftSkin";
 
 export const renderTypes: Array<RenderType> = [
     "default",
@@ -29,7 +29,8 @@ export const renderTypes: Array<RenderType> = [
     "pixel",
     "ornament",
     "skin",
-    "profile"
+    "profile",
+    "sitting"
 ]
 
 export const avaibleCropTypes: {
@@ -63,7 +64,8 @@ export const avaibleCropTypes: {
     pixel: ["full", "bust", "face"],
     ornament: ["full"],
     skin: ["default", "processed"],
-    profile: ["full", "bust", "face"]
+    profile: ["full", "bust", "face"],
+    sitting: ["full"]
 };
 
 export const avaibleRenderTypes: Array<{
@@ -98,5 +100,23 @@ export const avaibleRenderTypes: Array<{
     { name: "Pixel", value: "pixel" },
     { name: "Ornament", value: "ornament" },
     { name: "Skin", value: "skin" },
-    { name: "Profile", value: "profile" }
+    { name: "Profile", value: "profile" },
+    { name: "Sitting", value: "sitting" }
 ]
+
+export const customSkinsConfig: {
+    [key in RenderType]?: SkinConfig;
+} = {
+    sitting: {
+        cameraPosition:{
+            x: "37.59",
+            y: "32.05",
+            z: "-54.2"
+        },
+        cameraFocalPoint: {
+            x: "5.75",
+            y: "21.35",
+            z: "-8.27"
+        },
+    }
+};

@@ -1,13 +1,13 @@
 import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
-import { avaibleCropTypes } from "../../../data/constants/lunarEclypse";
+import { avaibleCropTypes, customSkinsConfig } from "../../../data/constants/minecraftSkin";
 import type { Client } from "../../../structures/DiscordClient";
-import type { SkinType } from "../../../types/lunarEclypse";
+import type { SkinType } from "../../../types/minecraftSkin";
 
 export default async function (
 	client: Client,
 	int: ChatInputCommandInteraction,
 ) {
-	const renderType = int.options.getString("render-type", true);
+	let renderType = int.options.getString("render-type", true);
 	const cropType = int.options.getString("crop-type", true);
 
 	const skinType = int.options.getString("skin-type", false) as SkinType || "wide"
@@ -33,6 +33,18 @@ export default async function (
 	const urlParams = new URLSearchParams({
 		skinType
 	})
+
+	if (customSkinsConfig[renderType]) {
+		const skinConfig = customSkinsConfig[renderType];
+		renderType = "custom"
+
+		const url = `${global.baseUrl}/skinModels/${renderType}`
+
+		urlParams.append("wideModel", `${url}/wide.obj`);
+		urlParams.append("slimModel", `${url}/slim.obj`);
+		if (skinConfig.cameraPosition) urlParams.append("cameraPosition", JSON.stringify(skinConfig.cameraPosition));
+		if (skinConfig.cameraFocalPoint) urlParams.append("cameraFocalPoint", JSON.stringify(skinConfig.cameraFocalPoint));
+	}
 
 	if (skinUrl) urlParams.append("skinUrl", skinUrl)
 

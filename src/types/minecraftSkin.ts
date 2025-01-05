@@ -29,4 +29,22 @@ export type RenderType =
     | "pixel"
     | "ornament"
     | "skin"
-    | "profile";
+    | "profile"
+    | "sitting";
+
+export interface SkinConfig {
+    cameraPosition?: CameraPosition;
+    cameraFocalPoint?: CameraFocalPoint;
+}
+
+export interface CameraPosition {
+    x: string;
+    y: string;
+    z: string;
+}
+
+export interface CameraFocalPoint {
+    x: string;
+    y: string;
+    z: string;
+}

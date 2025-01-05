@@ -1,6 +1,6 @@
-import { avaibleCropTypes, avaibleRenderTypes } from "../../data/constants/lunarEclypse";
+import { avaibleCropTypes, avaibleRenderTypes } from "../../data/constants/minecraftSkin";
 import type { Client } from "../../structures/DiscordClient";
-import type { CropType } from "../../types/lunarEclypse";
+import type { CropType } from "../../types/minecraftSkin";
 import type { Command } from "../../types/command";
 import type {
 	AutocompleteInteraction,
