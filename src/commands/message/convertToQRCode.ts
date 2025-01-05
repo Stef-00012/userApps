@@ -1,4 +1,5 @@
 import {
+	MessageFlags,
 	ModalBuilder,
 	TextInputBuilder,
 	TextInputStyle,
@@ -19,7 +20,7 @@ export default {
 		if (int.targetMessage.content.length <= 0)
 			return await int.reply({
 				content: "This message has no content",
-				ephemeral: true,
+				flags: MessageFlags.Ephemeral,
 			});
 
 		const modal = new ModalBuilder()
@@ -97,7 +98,7 @@ export default {
 						if (!req.data)
 							return await inter.reply({
 								content: "The API did not return any QR code",
-								ephemeral: true,
+								flags: MessageFlags.Ephemeral,
 							});
 
 						const attachment = new AttachmentBuilder(req.data);

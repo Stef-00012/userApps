@@ -1,4 +1,4 @@
-import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
+import { type ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from "discord.js";
 import type { Client } from "../../structures/DiscordClient";
 import type { Command } from "../../types/command";
 import axios from "axios";
@@ -16,7 +16,7 @@ export default {
 		const ephemeral = int.options.getBoolean("personal") || false;
 
 		await int.deferReply({
-			ephemeral,
+			flags: ephemeral ? MessageFlags.Ephemeral : undefined,
 		});
 
 		try {

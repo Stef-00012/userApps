@@ -2,13 +2,14 @@ import type { Client } from "../../../structures/DiscordClient";
 import type { Tag, TagData } from "../../../types/tag";
 import { and, eq } from "drizzle-orm";
 import {
-	EmbedBuilder,
-	ButtonBuilder,
 	ButtonStyle,
-	ActionRowBuilder,
+	EmbedBuilder,
 	ModalBuilder,
-	TextInputBuilder,
+	MessageFlags,
+	ButtonBuilder,
 	TextInputStyle,
+	TextInputBuilder,
+	ActionRowBuilder,
 	type ChatInputCommandInteraction,
 	type HexColorString,
 	type EmbedField,
@@ -19,7 +20,7 @@ export default async function (
 	int: ChatInputCommandInteraction,
 ) {
 	await int.deferReply({
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 
 	const tagName = int.options.getString("name", true);
@@ -224,7 +225,7 @@ export default async function (
 				await inter.reply({
 					content: "Sucessfully added this embed to the tag:",
 					embeds: [embed],
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral,
 				});
 
 				if (!tagData.embeds) tagData.embeds = [];
@@ -297,7 +298,7 @@ export default async function (
 					if (!interaction.isFromMessage())
 						return interaction.reply({
 							content: "Something went wrong...",
-							ephemeral: true,
+							flags: MessageFlags.Ephemeral,
 						});
 
 					const fieldName = interaction.fields.getTextInputValue("name");

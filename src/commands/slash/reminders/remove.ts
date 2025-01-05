@@ -1,5 +1,5 @@
 import type { Client } from "../../../structures/DiscordClient";
-import type { ChatInputCommandInteraction } from "discord.js";
+import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
 import { and, eq } from "drizzle-orm";
 
 export default async function (
@@ -7,7 +7,7 @@ export default async function (
 	int: ChatInputCommandInteraction,
 ) {
 	await int.deferReply({
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 
 	const reminderId = int.options.getString("id", true);

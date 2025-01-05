@@ -30,7 +30,8 @@ export const renderTypes: Array<RenderType> = [
     "ornament",
     "skin",
     "profile",
-    "sitting"
+    "sitting",
+    "tpose"
 ]
 
 export const avaibleCropTypes: {

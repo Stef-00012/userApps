@@ -1,17 +1,29 @@
-import { type ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from "discord.js";
+import {
+	type ChatInputCommandInteraction,
+	EmbedBuilder,
+	MessageFlags,
+} from "discord.js";
 import {
 	avaibleCropTypes,
 	customSkinsConfig,
+	renderTypes,
 } from "../../../data/constants/minecraftSkin";
 import type { Client } from "../../../structures/DiscordClient";
-import type { SkinType } from "../../../types/minecraftSkin";
+import type {
+	CropType,
+	RenderType,
+	SkinType,
+} from "../../../types/minecraftSkin";
 
 export default async function (
 	client: Client,
 	int: ChatInputCommandInteraction,
 ) {
-	let renderType = int.options.getString("render-type", true);
-	const cropType = int.options.getString("crop-type", true);
+	let renderType: RenderType | "custom" = int.options.getString(
+		"render-type",
+		true,
+	) as RenderType;
+	const cropType = int.options.getString("crop-type", true) as CropType;
 
 	const skinType =
 		(int.options.getString("skin-type", false) as SkinType) || "wide";
@@ -23,10 +35,16 @@ export default async function (
 
 	const urlRegex = /^http:\/\/(.*)?|https:\/\/(.*)?$/;
 
+	if (!renderTypes.includes(renderType))
+		return int.reply({
+			content: "Invalid render type",
+			flags: MessageFlags.Ephemeral,
+		});
+
 	if (!avaibleCropTypes[renderType].includes(cropType))
 		return await int.reply({
 			content: "Invalid crop type",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	if (skinUrl && !urlRegex.test(skinUrl))
@@ -39,18 +57,20 @@ export default async function (
 		skinType,
 	});
 
-	if (customSkinsConfig[renderType]) {
-		const skinConfig = customSkinsConfig[renderType];
+	const skinConfig = customSkinsConfig[renderType];
 
+	if (skinConfig) {
 		const url = `${global.baseUrl}/skinModels/${renderType}`;
 
 		urlParams.append("wideModel", `${url}/wide.obj`);
 		urlParams.append("slimModel", `${url}/slim.obj`);
+
 		if (skinConfig.cameraPosition)
 			urlParams.append(
 				"cameraPosition",
 				JSON.stringify(skinConfig.cameraPosition),
 			);
+
 		if (skinConfig.cameraFocalPoint)
 			urlParams.append(
 				"cameraFocalPoint",

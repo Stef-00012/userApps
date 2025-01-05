@@ -3,6 +3,7 @@ import type { Tag, TagData } from "../../../types/tag";
 import { eq } from "drizzle-orm";
 import {
 	AttachmentBuilder,
+	MessageFlags,
 	type ChatInputCommandInteraction,
 } from "discord.js";
 
@@ -11,7 +12,7 @@ export default async function (
 	int: ChatInputCommandInteraction,
 ) {
 	await int.deferReply({
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 
 	const tagsSchema = client.dbSchema.tags;

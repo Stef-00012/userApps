@@ -1,6 +1,6 @@
 import type { SendTagData, Tag, TagData } from "../../../types/tag";
 import type { Client } from "../../../structures/DiscordClient";
-import type { ChatInputCommandInteraction } from "discord.js";
+import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
 import { and, eq } from "drizzle-orm";
 
 export default async function (
@@ -19,7 +19,7 @@ export default async function (
 	if (!existingTag)
 		return await int.reply({
 			content: "This tag doesn't exist",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	const existingTagData: TagData = JSON.parse(existingTag.data);
@@ -31,6 +31,6 @@ export default async function (
 
 	await int.reply({
 		...(existingTagData as SendTagData),
-		ephemeral,
+		flags: ephemeral ? MessageFlags.Ephemeral : undefined,
 	});
 }

@@ -1,4 +1,4 @@
-import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
+import { type ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from "discord.js";
 import type { Client } from "../../structures/DiscordClient";
 import type { Command } from "../../types/command";
 import util from "node:util";
@@ -14,7 +14,7 @@ export default {
 		const embed = new EmbedBuilder();
 
 		await int.deferReply({
-			ephemeral,
+			flags: ephemeral ? MessageFlags.Ephemeral : undefined,
 		});
 
 		const fields = [

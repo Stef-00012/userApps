@@ -1,4 +1,4 @@
-import type { ChatInputCommandInteraction } from "discord.js";
+import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
 import type { ZiplineRequestData } from "../../types/zipline";
 import type { Client } from "../../structures/DiscordClient";
 import type { Command } from "../../types/command";
@@ -24,11 +24,11 @@ export default {
 		if (["http://", "https://"].every((protocol) => !url.startsWith(protocol)))
 			return await int.reply({
 				content: "Yo must use a valid URL",
-				ephemeral: true,
+				flags: MessageFlags.Ephemeral,
 			});
 
 		await int.deferReply({
-			ephemeral,
+			flags: ephemeral ? MessageFlags.Ephemeral : undefined,
 		});
 
 		const data = {

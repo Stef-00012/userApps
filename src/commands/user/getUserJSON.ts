@@ -1,9 +1,10 @@
 import type { Client } from "../../structures/DiscordClient";
 import type { Command } from "../../types/command";
 import {
-	type UserContextMenuCommandInteraction,
-	AttachmentBuilder,
 	EmbedBuilder,
+	MessageFlags,
+	AttachmentBuilder,
+	type UserContextMenuCommandInteraction,
 } from "discord.js";
 
 export default {
@@ -30,7 +31,7 @@ export default {
 		await int.reply({
 			embeds: [embed],
 			files: [attachment],
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 	},
 } as Command;

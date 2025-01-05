@@ -4,10 +4,11 @@ import { randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
 import axios from "axios";
 import {
-	ButtonBuilder,
 	ButtonStyle,
-	ActionRowBuilder,
+	MessageFlags,
+	ButtonBuilder,
 	ComponentType,
+	ActionRowBuilder,
 	type ChatInputCommandInteraction,
 } from "discord.js";
 
@@ -16,7 +17,7 @@ export default async function (
 	int: ChatInputCommandInteraction,
 ) {
 	await int.deferReply({
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 	const file = int.options.getAttachment("file", true);
 	const overwrite = int.options.getBoolean("overwrite") || false;
@@ -24,7 +25,7 @@ export default async function (
 
 	if (file.contentType?.split(";")[0] !== "application/json")
 		return await int.reply({
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 			content: "The uploaded file is not a JSON file",
 		});
 
@@ -192,7 +193,7 @@ export default async function (
 
 							await button.reply({
 								content: "Successfully kept the old tag",
-								ephemeral: true,
+								flags: MessageFlags.Ephemeral,
 							});
 
 							return resolve();
@@ -203,7 +204,7 @@ export default async function (
 
 							await button.reply({
 								content: "Successfully overwrote the new tag",
-								ephemeral: true,
+								flags: MessageFlags.Ephemeral,
 							});
 
 							return resolve();

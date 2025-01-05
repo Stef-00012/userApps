@@ -4,14 +4,15 @@ import { randomUUID } from "node:crypto";
 import { eq, and } from "drizzle-orm";
 import ms from "enhanced-ms";
 import {
+	ButtonStyle,
+	MessageFlags,
 	ModalBuilder,
-	TextInputBuilder,
+	ButtonBuilder,
 	TextInputStyle,
+	TextInputBuilder,
 	ActionRowBuilder,
 	type ModalSubmitInteraction,
 	type MessageContextMenuCommandInteraction,
-	ButtonBuilder,
-	ButtonStyle,
 } from "discord.js";
 
 export default {
@@ -69,7 +70,7 @@ export default {
 				if (!msTime || msTime < 30000)
 					return await mainModalInteraction.reply({
 						content: "Invalid time",
-						ephemeral: true,
+						flags: MessageFlags.Ephemeral,
 					});
 
 				if (type === "content") {
@@ -79,7 +80,7 @@ export default {
 					)
 						return await mainModalInteraction.reply({
 							content: "This message has no content",
-							ephemeral: true,
+							flags: MessageFlags.Ephemeral,
 						});
 
 					const reminderId = await generateReminderId(
@@ -106,7 +107,7 @@ export default {
 					const mainModalReply = await mainModalInteraction.reply({
 						content: "Do you want to save or modify the reminder content?",
 						components: [buttonsRow],
-						ephemeral: true,
+						flags: MessageFlags.Ephemeral,
 						fetchReply: true,
 					});
 
@@ -168,7 +169,7 @@ export default {
 									contentModalInteraction.fields.getTextInputValue("reminder");
 
 								await contentModalInteraction.deferReply({
-									ephemeral: true,
+									flags: MessageFlags.Ephemeral,
 								});
 
 								await addReminder(
@@ -217,7 +218,7 @@ export default {
 				);
 
 				await mainModalInteraction.deferReply({
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral,
 				});
 
 				await addReminder(

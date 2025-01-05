@@ -1,6 +1,6 @@
 import type { Client } from "../../../structures/DiscordClient";
 import type { CommandStatus } from "../../../types/permissions";
-import type { ChatInputCommandInteraction } from "discord.js";
+import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
 
 export default async function (
 	client: Client,
@@ -15,7 +15,7 @@ export default async function (
 	if (commandStatusJSON[commandName])
 		return await int.reply({
 			content: `\`${commandName}\` is already enabled`,
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	const commandData = client.commands.get(commandName);
@@ -23,7 +23,7 @@ export default async function (
 	if (!commandData)
 		return int.reply({
 			content: "Invalid Command",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	if (
@@ -33,7 +33,7 @@ export default async function (
 		return await int.reply({
 			content:
 				"You must add a N.A.V.I.A.C. username and token in order to be able to enable this command",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 	}
 
@@ -46,7 +46,7 @@ export default async function (
 		return await int.reply({
 			content:
 				"You must add your zipline token, url and chunk size in order to be able to enable this command",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 	}
 
@@ -59,6 +59,6 @@ export default async function (
 
 	await int.reply({
 		content: `Successfully enabled the command \`${commandName}\``,
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 }

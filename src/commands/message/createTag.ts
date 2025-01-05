@@ -1,4 +1,5 @@
 import {
+	MessageFlags,
 	ModalBuilder,
 	TextInputBuilder,
 	TextInputStyle,
@@ -19,7 +20,7 @@ export default {
 		)
 			return await int.reply({
 				content: "This message has no content",
-				ephemeral: true,
+				flags: MessageFlags.Ephemeral,
 			});
 
 		if (int.targetMessage?.content?.length > 0) {
@@ -99,7 +100,7 @@ export default {
 								? `${tagContent.substr(0, 2000 - 62 - tagName.length)}...`
 								: tagContent
 						}`,
-						ephemeral: true,
+						flags: MessageFlags.Ephemeral,
 					});
 				});
 		} else {

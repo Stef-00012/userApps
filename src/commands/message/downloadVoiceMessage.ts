@@ -21,7 +21,7 @@ export default {
 		if (!int.targetMessage.flags.has(MessageFlags.IsVoiceMessage))
 			return int.reply({
 				content: "This message is not a voice message",
-				ephemeral: true,
+				flags: MessageFlags.Ephemeral,
 			});
 
 		const attachment = int.targetMessage.attachments.first();
@@ -29,11 +29,11 @@ export default {
 		if (!attachment)
 			return int.reply({
 				content: "This message has no files",
-				ephemeral: true,
+				flags: MessageFlags.Ephemeral,
 			});
 
 		await int.deferReply({
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 		const { data } = await axios.get(attachment.url, {

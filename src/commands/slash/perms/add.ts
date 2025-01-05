@@ -1,6 +1,6 @@
 import type { CommandPermissions } from "../../../types/permissions";
 import type { Client } from "../../../structures/DiscordClient";
-import type { ChatInputCommandInteraction } from "discord.js";
+import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
 
 export default async function (
 	client: Client,
@@ -19,13 +19,13 @@ export default async function (
 	if (!user)
 		return await int.reply({
 			content: "I couldn't find this user",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	if (commandPermissionsJSON[commandName].includes(user))
 		return await int.reply({
 			content: `\`${user}\` is already allowed to use this command`,
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	commandPermissionsJSON[commandName] = Array.from(
@@ -43,6 +43,6 @@ export default async function (
 
 	await int.reply({
 		content: `Successfully added \`${user}\` in the users who can run the command \`${commandName}\``,
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 }

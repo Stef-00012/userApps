@@ -1,4 +1,4 @@
-import type { ChatInputCommandInteraction } from "discord.js";
+import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
 import type { Client } from "../../structures/DiscordClient";
 import type { Command } from "../../types/command";
 import streamToBlob from "stream-to-blob";
@@ -39,17 +39,17 @@ export default {
 			if (attachment.size > 95 * 1024 * 1024 && !chunked)
 				return await int.reply({
 					content: "Your file is too big, non-chunked files can be max 95mb",
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral,
 				});
 
 			if (attachment.size > maxFileSize * 1024 * 1024)
 				return await int.reply({
 					content: `Your file is too big, max file size ${maxFileSize}mb`,
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral,
 				});
 
 			await int.deferReply({
-				ephemeral,
+				flags: ephemeral ? MessageFlags.Ephemeral : undefined,
 			});
 
 			const response = await axios.get(attachment.url, {

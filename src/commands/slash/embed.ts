@@ -1,13 +1,14 @@
 import type { Client } from "../../structures/DiscordClient";
 import type { Command } from "../../types/command";
 import {
-	EmbedBuilder,
-	ButtonBuilder,
 	ButtonStyle,
-	ActionRowBuilder,
 	ModalBuilder,
-	TextInputBuilder,
+	EmbedBuilder,
+	MessageFlags,
+	ButtonBuilder,
 	TextInputStyle,
+	ActionRowBuilder,
+	TextInputBuilder,
 	type ChatInputCommandInteraction,
 	type HexColorString,
 	type EmbedField,
@@ -38,7 +39,7 @@ export default {
 		} catch (e) {
 			return await int.reply({
 				content: "Invalid JSON",
-				ephemeral: true,
+				flags: MessageFlags.Ephemeral,
 			});
 		}
 
@@ -78,7 +79,7 @@ export default {
 			} catch (e) {
 				return await int.reply({
 					content: "I'm unable to send this embed, check the console",
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral,
 				});
 			}
 		}
@@ -106,7 +107,7 @@ export default {
 
 		const msg = await int.reply({
 			components: [fieldButtonsRow],
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 		const buttonCollector = msg.createMessageComponentCollector({
@@ -133,7 +134,7 @@ export default {
 				} catch (e) {
 					return await int.reply({
 						content: "I'm unable to send this embed, check the console",
-						ephemeral: true,
+						flags: MessageFlags.Ephemeral,
 					});
 				}
 			}
@@ -178,7 +179,7 @@ export default {
 						if (!interaction.isFromMessage())
 							return interaction.reply({
 								content: "Something went wrong...",
-								ephemeral: true,
+								flags: MessageFlags.Ephemeral,
 							});
 
 						const fieldName = interaction.fields.getTextInputValue("name");

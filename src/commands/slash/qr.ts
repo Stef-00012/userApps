@@ -3,6 +3,7 @@ import type { Command } from "../../types/command";
 import qrcode from "qrcode-terminal";
 import axios from "axios";
 import {
+	MessageFlags,
 	AttachmentBuilder,
 	type ChatInputCommandInteraction,
 } from "discord.js";
@@ -45,7 +46,7 @@ export default {
 				if (!req.data)
 					return await int.reply({
 						content: "The API did not return any QR code",
-						ephemeral: true,
+						flags: MessageFlags.Ephemeral,
 					});
 
 				const attachment = new AttachmentBuilder(req.data);

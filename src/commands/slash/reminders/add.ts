@@ -1,5 +1,5 @@
 import type { Client } from "../../../structures/DiscordClient";
-import type { ChatInputCommandInteraction } from "discord.js";
+import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
 import { randomUUID } from "node:crypto";
 import { and, eq } from "drizzle-orm";
 import ms from "enhanced-ms";
@@ -16,13 +16,13 @@ export default async function (
 	if (!msTime || msTime < 30000)
 		return await int.reply({
 			content: "Invalid time",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	let reminderId = randomUUID().slice(0, 8);
 
 	await int.deferReply({
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 
 	let existsReminderWithId = await checkId(client, int, reminderId);

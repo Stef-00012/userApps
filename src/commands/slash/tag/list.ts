@@ -1,5 +1,5 @@
 import type { Client } from "../../../structures/DiscordClient";
-import type { ChatInputCommandInteraction } from "discord.js";
+import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
 import type { Tag } from "../../../types/tag";
 import { eq } from "drizzle-orm";
 
@@ -17,7 +17,7 @@ export default async function (
 	if (userTags.length === 0)
 		return await int.reply({
 			content: "You have no tags",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	const tagsString = userTags.map((tag) => tag.name).join("\n- ");
@@ -26,6 +26,6 @@ export default async function (
 		content: `Your tags are:\n- ${
 			tagsString.length > 1950 ? `${tagsString.substr(0, 1950)}...` : tagsString
 		}`,
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 }

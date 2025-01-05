@@ -2,6 +2,7 @@ import type { Client } from "../../structures/DiscordClient";
 import type { Command } from "../../types/command";
 import {
 	EmbedBuilder,
+	MessageFlags,
 	type UserContextMenuCommandInteraction,
 } from "discord.js";
 
@@ -13,7 +14,7 @@ export default {
 		if (!int.targetUser.avatar)
 			return await int.reply({
 				content: "The user doesn't have any avatar",
-				ephemeral: true,
+				flags: MessageFlags.Ephemeral,
 			});
 
 		const url = int.targetUser.displayAvatarURL();
@@ -25,7 +26,7 @@ export default {
 
 		await int.reply({
 			embeds: [embed],
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 	},
 } as Command;

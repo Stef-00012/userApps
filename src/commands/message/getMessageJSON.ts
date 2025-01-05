@@ -4,6 +4,7 @@ import {
 	type MessageContextMenuCommandInteraction,
 	AttachmentBuilder,
 	EmbedBuilder,
+	MessageFlags,
 } from "discord.js";
 
 export default {
@@ -32,7 +33,7 @@ export default {
 		await int.reply({
 			embeds: [embed],
 			files: [attachment],
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 	},
 } as Command;

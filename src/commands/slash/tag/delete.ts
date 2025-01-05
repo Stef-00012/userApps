@@ -1,5 +1,5 @@
 import type { Client } from "../../../structures/DiscordClient";
-import type { ChatInputCommandInteraction } from "discord.js";
+import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
 import type { Tag } from "../../../types/tag";
 import { eq, and } from "drizzle-orm";
 
@@ -18,7 +18,7 @@ export default async function (
 	if (!existingTag)
 		return await int.reply({
 			content: "This tag doesn't exist",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	await client.db
@@ -27,6 +27,6 @@ export default async function (
 
 	await int.reply({
 		content: `Successfully deleted the tag \`${tagName}\``,
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 }

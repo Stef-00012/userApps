@@ -1,5 +1,5 @@
 import type { Client } from "../../../../structures/DiscordClient";
-import type { ChatInputCommandInteraction } from "discord.js";
+import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
 
 export default async function (
 	client: Client,
@@ -11,7 +11,7 @@ export default async function (
 	if (!panelUrl.startsWith("http://") && !panelUrl.startsWith("https://"))
 		return await int.reply({
 			content: "The provided panel URL is invalid",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	panelUrl = panelUrl.split("/").slice(0, 3).join("/");
@@ -19,11 +19,11 @@ export default async function (
 	if (!apiKey.startsWith("ptlc_"))
 		return await int.reply({
 			content: "Invalid API key",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	await int.deferReply({
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 
 	const userPteroData = {

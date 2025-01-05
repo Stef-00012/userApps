@@ -1,4 +1,4 @@
-import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
+import { type ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from "discord.js";
 import type { CommandPermissions } from "../../../types/permissions";
 import type { Client } from "../../../structures/DiscordClient";
 import commands from "../../../commands"
@@ -34,6 +34,6 @@ export default async function (
 
 	await int.reply({
 		embeds: [embed],
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 }

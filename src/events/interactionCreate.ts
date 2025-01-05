@@ -1,6 +1,6 @@
 import type { CommandPermissions, CommandStatus } from "../types/permissions";
 import type { Client } from "../structures/DiscordClient";
-import type { Interaction } from "discord.js";
+import { MessageFlags, type Interaction } from "discord.js";
 import { eq } from "drizzle-orm";
 
 export default async function (client: Client, int: Interaction) {
@@ -16,7 +16,7 @@ export default async function (client: Client, int: Interaction) {
 	)
 		return int.reply({
 			content: "This command is disabled",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	if (
@@ -42,7 +42,7 @@ export default async function (client: Client, int: Interaction) {
 			!commandPermissionsJSON[int.commandName].includes(int.user.id)
 		)
 			return int.reply({
-				ephemeral: true,
+				flags: MessageFlags.Ephemeral,
 				content: "You're not allowed to run this command",
 			});
 
@@ -50,7 +50,7 @@ export default async function (client: Client, int: Interaction) {
 
 		if (!cmd)
 			return int.reply({
-				ephemeral: true,
+				flags: MessageFlags.Ephemeral,
 				content: "I couldn't find this command",
 			});
 

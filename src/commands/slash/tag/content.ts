@@ -1,5 +1,5 @@
 import type { Client } from "../../../structures/DiscordClient";
-import type { ChatInputCommandInteraction } from "discord.js";
+import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
 import type { Tag, TagData } from "../../../types/tag";
 import { and, eq } from "drizzle-orm";
 
@@ -32,7 +32,7 @@ export default async function (
 	)
 		return await int.reply({
 			content: "A tag can not be empty",
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	await client.db
@@ -51,6 +51,6 @@ export default async function (
 
 	await int.reply({
 		content: `Successfully created/updated the tag "${tagName}"`,
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 }

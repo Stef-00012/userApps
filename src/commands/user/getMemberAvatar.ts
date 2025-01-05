@@ -2,6 +2,7 @@ import type { Client } from "../../structures/DiscordClient";
 import type { Command } from "../../types/command";
 import {
 	EmbedBuilder,
+	MessageFlags,
 	type UserContextMenuCommandInteraction,
 } from "discord.js";
 
@@ -13,7 +14,7 @@ export default {
 		if (!int.targetMember?.avatar)
 			return await int.reply({
 				content: "The user doesn't have any avatar in this server",
-				ephemeral: true,
+				flags: MessageFlags.Ephemeral,
 			});
 
 		const url = `https://cdn.discordapp.com/guilds/${int.guildId}/users/${int.targetId}/avatars/${int.targetMember.avatar}.webp`;
@@ -25,7 +26,7 @@ export default {
 
 		await int.reply({
 			embeds: [embed],
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 	},
 } as Command;

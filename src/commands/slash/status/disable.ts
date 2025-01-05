@@ -1,6 +1,6 @@
 import type { Client } from "../../../structures/DiscordClient";
 import type { CommandStatus } from "../../../types/permissions";
-import type { ChatInputCommandInteraction } from "discord.js";
+import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
 
 export default async function (
 	client: Client,
@@ -15,7 +15,7 @@ export default async function (
 	if (!commandStatusJSON[commandName])
 		return await int.reply({
 			content: `\`${commandName}\` is already disabled`,
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	commandStatusJSON[commandName] = false;
@@ -27,6 +27,6 @@ export default async function (
 
 	await int.reply({
 		content: `Successfully disabled the command \`${commandName}\``,
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 }

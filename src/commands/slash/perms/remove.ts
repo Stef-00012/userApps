@@ -1,6 +1,6 @@
 import type { CommandPermissions } from "../../../types/permissions";
 import type { Client } from "../../../structures/DiscordClient";
-import type { ChatInputCommandInteraction } from "discord.js";
+import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
 
 export default async function (
 	client: Client,
@@ -24,7 +24,7 @@ export default async function (
 	if (!commandPermissionsJSON[commandName].includes(user))
 		return await int.reply({
 			content: `\`${user}\` is already not allowed to use this command`,
-			ephemeral: true,
+			flags: MessageFlags.Ephemeral,
 		});
 
 	commandPermissionsJSON[commandName] = commandPermissionsJSON[
@@ -38,6 +38,6 @@ export default async function (
 
 	await int.reply({
 		content: `Successfully removed \`${user}\` from the users who can run the command \`${commandName}\``,
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 }
