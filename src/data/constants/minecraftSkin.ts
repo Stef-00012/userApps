@@ -65,7 +65,8 @@ export const avaibleCropTypes: {
     ornament: ["full"],
     skin: ["default", "processed"],
     profile: ["full", "bust", "face"],
-    sitting: ["full"]
+    sitting: ["full"],
+    tpose: ["full"]
 };
 
 export const avaibleRenderTypes: Array<{
@@ -101,7 +102,8 @@ export const avaibleRenderTypes: Array<{
     { name: "Ornament", value: "ornament" },
     { name: "Skin", value: "skin" },
     { name: "Profile", value: "profile" },
-    { name: "Sitting", value: "sitting" }
+    { name: "Sitting", value: "sitting" },
+    { name: "T Pose", value: "tpose" }
 ]
 
 export const customSkinsConfig: {
