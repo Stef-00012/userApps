@@ -117,7 +117,7 @@ export default async function (
 
 	if (skinUrl) embed.setURL(skinUrl);
 
-	await int.reply({
+	await int.editReply({
 		embeds: [embed],
 	});
 }
