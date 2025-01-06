@@ -540,6 +540,19 @@ export default [
 					// }
 				],
 			},
+			{
+				name: "user",
+				type: ApplicationCommandOptionType.Subcommand,
+				description: "Get info about a player",
+				options: [
+					{
+						name: "player",
+						description: "he player name or UUID (prefix with . for Bedrock)",
+						type: ApplicationCommandOptionType.String,
+						required: true,
+					},
+				],
+			},
 		],
 	},
 	{

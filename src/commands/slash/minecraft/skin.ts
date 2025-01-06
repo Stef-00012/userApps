@@ -1,19 +1,21 @@
-import {
-	type ChatInputCommandInteraction,
-	EmbedBuilder,
-	MessageFlags,
-} from "discord.js";
+import type { Client } from "../../../structures/DiscordClient";
+import type { Player } from "../../../types/minecraftPlayer";
 import {
 	avaibleCropTypes,
 	customSkinsConfig,
 	renderTypes,
 } from "../../../data/constants/minecraftSkin";
-import type { Client } from "../../../structures/DiscordClient";
 import type {
 	CropType,
 	RenderType,
 	SkinType,
 } from "../../../types/minecraftSkin";
+import axios from "axios";
+import {
+	type ChatInputCommandInteraction,
+	EmbedBuilder,
+	MessageFlags,
+} from "discord.js";
 
 export default async function (
 	client: Client,
@@ -25,7 +27,7 @@ export default async function (
 	) as RenderType;
 	const cropType = int.options.getString("crop-type", true) as CropType;
 
-	const skinType =
+	let skinType =
 		(int.options.getString("skin-type", false) as SkinType) || "wide";
 
 	const defaultSkin = skinType === "wide" ? "MHF_Steve" : "MHF_Alex";
@@ -52,6 +54,16 @@ export default async function (
 			content: "This skin URL is not a valid URL",
 			flags: MessageFlags.Ephemeral,
 		});
+
+	await int.deferReply();
+
+	try {
+		const playerInfo = await axios.get(`https://starlightskins.lunareclipse.studio/info/user/${player}`);
+
+		const playerData = playerInfo.data as Player;
+
+		if (playerData.skinType) skinType = playerData.skinType;
+	} catch (e) {}
 
 	const urlParams = new URLSearchParams({
 		skinType,
