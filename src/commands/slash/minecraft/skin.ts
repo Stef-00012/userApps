@@ -67,8 +67,6 @@ export default async function (
 		content: res.error
 	})
 
-	console.log(res)
-
 	const attachment = new AttachmentBuilder(res.image, {
 		name: "skin.png",
 	})
