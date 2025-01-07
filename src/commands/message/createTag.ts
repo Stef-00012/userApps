@@ -1,3 +1,5 @@
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import {
 	MessageFlags,
 	ModalBuilder,
@@ -6,8 +8,6 @@ import {
 	ActionRowBuilder,
 	type MessageContextMenuCommandInteraction,
 } from "discord.js";
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
 
 export default {
 	name: "Save as Tag",

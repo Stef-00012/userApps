@@ -6,18 +6,13 @@ export interface TagData {
 }
 
 export interface SendTagData {
-	content?: string | undefined;
+	content: string | undefined;
 	embeds?: Array<APIEmbed> | undefined;
 }
 
 export interface ImportTag {
 	name: string;
-	data: ImportTagData;
-}
-
-export interface ImportTagData {
-	content?: string | null;
-	embeds?: Array<APIEmbed> | null;
+	data: TagData;
 }
 
 export interface Tag {

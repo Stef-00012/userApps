@@ -1,7 +1,11 @@
-import type { CommandPermissions, CommandStatus } from "../types/permissions";
-import type { Client } from "../structures/DiscordClient";
-import { MessageFlags, type Interaction } from "discord.js";
+import type { CommandPermissions, CommandStatus } from "?/permissions";
+import type { Client } from "&/DiscordClient";
 import { eq } from "drizzle-orm";
+import {
+	type DiscordAPIError,
+	MessageFlags,
+	type Interaction,
+} from "discord.js";
 
 export default async function (client: Client, int: Interaction) {
 	const commandStatusJSON: CommandStatus = await Bun.file(
@@ -57,9 +61,11 @@ export default async function (client: Client, int: Interaction) {
 		try {
 			await cmd.execute(client, int);
 		} catch (e) {
-			console.log(e);
+			const error = e as DiscordAPIError;
 
-			if (e.code !== 10062) {
+			console.log(error);
+
+			if (error.code !== 10062) {
 				if (int.deferred) {
 					int.editReply({
 						content: "Something went wrong...",
@@ -103,7 +109,9 @@ export default async function (client: Client, int: Interaction) {
 		try {
 			await cmd.autocomplete(client, int);
 		} catch (e) {
-			if (e.code !== 10062) {
+			const error = e as DiscordAPIError;
+
+			if (error.code !== 10062) {
 				await int.respond([]);
 			}
 		}

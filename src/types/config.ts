@@ -1,7 +1,7 @@
 export interface Config {
 	token: string;
 	owners: Array<string>;
-	public: boolean,
+	public: boolean;
 	zipline?: ZiplineConfig;
 	naviac?: NaviacConfig;
 	web?: WebConfig;
@@ -18,6 +18,8 @@ export interface NaviacConfig {
 	username: string;
 	token: string;
 }
+
+export type NaviacConfigKeys = keyof NaviacConfig;
 
 export interface WebConfig {
 	enabled: boolean;
@@ -45,7 +47,7 @@ export interface DiscordWebhookConfig {
 	enabled: boolean;
 	public_key: string;
 	message: DiscordWebhookAppriseMessageConfig;
-	urls: Array<string>
+	urls: Array<string>;
 }
 
 export interface DiscordWebhookAppriseMessageConfig {

@@ -1,9 +1,9 @@
-import type { Client } from "../../../structures/DiscordClient";
 import type { ChatInputCommandInteraction } from "discord.js";
-import axios from "axios";
+import axios, { type AxiosError } from "axios";
+import type { Client } from "&/DiscordClient";
 
 export default async function (
-	client: Client,
+	_client: Client,
 	int: ChatInputCommandInteraction,
 ) {
 	await int.deferReply();
@@ -17,22 +17,24 @@ export default async function (
 			content: `Here's your Gary's joke\n> ${joke}`,
 		});
 	} catch (e) {
-		if (e?.response?.status === 429)
+		const error = e as AxiosError;
+
+		if (error?.response?.status === 429)
 			return await int.editReply({
 				content: "You are being ratelimited",
 			});
 
-		if (e?.response?.status === 500)
+		if (error?.response?.status === 500)
 			return await int.editReply({
 				content: "The Gary API is currently having issues",
 			});
 
-		if (e?.response?.status)
+		if (error?.response?.status)
 			return await int.editReply({
-				content: `The Gary API request failed with status ${e.response.status} (${e.response.statusText})`,
+				content: `The Gary API request failed with status ${error.response.status} (${error.response.statusText})`,
 			});
 
-		console.log(e);
+		console.log(error);
 
 		await int.editReply({
 			content: "Something went wrong...",

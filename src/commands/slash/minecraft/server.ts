@@ -1,12 +1,14 @@
 import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
-import type { Client } from "../../../structures/DiscordClient";
+import getMCJavaServerStatus from "$/getMCJavaServerStatus";
+import type { Client } from "&/DiscordClient";
 import type {
 	McstatusIoBedrockServerResponse,
 	McstatusIoJavaServerResponse,
-} from "../../../types/mcstatus.io";
+} from "?/mcstatus.io";
+import getMCBedrockServerStatus from "$/getMCBedrockServerStatus";
 
 export default async function (
-	client: Client,
+	_client: Client,
 	int: ChatInputCommandInteraction,
 ) {
 	const serverVersion = int.options.getString("version", true);
@@ -18,7 +20,7 @@ export default async function (
 		case "java": {
 			try {
 				const status: McstatusIoJavaServerResponse | null =
-					await client.functions.getMCJavaServerStatus(serverAddress);
+					await getMCJavaServerStatus(serverAddress);
 
 				if (!status)
 					return int.editReply({
@@ -79,7 +81,7 @@ export default async function (
 		case "bedrock": {
 			try {
 				const status: McstatusIoBedrockServerResponse | null =
-					await client.functions.getMCBedrockServerStatus(serverAddress);
+					await getMCBedrockServerStatus(serverAddress);
 
 				if (!status)
 					return int.editReply({
@@ -131,7 +133,7 @@ export default async function (
 				});
 			} catch (e) {
 				console.log(e);
-				
+
 				await int.editReply({
 					content: "Something went wrong...",
 				});

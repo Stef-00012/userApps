@@ -1,13 +1,17 @@
-import { type ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from "discord.js";
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import util from "node:util";
+import {
+	type ChatInputCommandInteraction,
+	EmbedBuilder,
+	MessageFlags,
+} from "discord.js";
 
 export default {
 	name: "eval",
 	requires: [],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		const code = int.options.getString("code", true);
 		const ephemeral = int.options.getBoolean("personal") ?? false;
 
@@ -34,7 +38,7 @@ export default {
 				typeof evaluatedCode !== "string" &&
 				typeof evaluatedCode?.then === "function"
 			) {
-				evaluatedCode.then((res) => {
+				evaluatedCode.then((res: string) => {
 					evaluatedCode = res;
 				});
 			}
@@ -68,12 +72,14 @@ export default {
 				embeds: [embed],
 			});
 		} catch (e) {
-			e = cleanEvalOutput(e);
+			const err = e as EvalError;
 
-			if (e.length > 1000) {
+			let error = cleanEvalOutput(err);
+
+			if (error.length > 1000) {
 				console.log(e);
 
-				e = e.substr(0, 1000);
+				error = error.substr(0, 1000);
 			}
 			fields.push({
 				name: "Error:",
@@ -89,10 +95,11 @@ export default {
 	},
 } as Command;
 
-function cleanEvalOutput(text) {
+function cleanEvalOutput(text: string | EvalError): string {
 	if (typeof text === "string")
 		return text
 			.replace(/`/g, `\`${String.fromCharCode(8203)}`)
 			.replace(/@/g, `@${String.fromCharCode(8203)}`);
-	return text;
+
+	return text as unknown as string;
 }

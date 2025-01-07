@@ -1,13 +1,13 @@
 import type { ChatInputCommandInteraction } from "discord.js";
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import crypto from "node:crypto";
 
 export default {
 	name: "8ball",
 	requires: [],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		const question = int.options.getString("question", true);
 
 		const categories = {
@@ -81,7 +81,11 @@ export default {
 
 		const categoryNames = Object.keys(categories);
 		const randomCategory =
-			categories[categoryNames[crypto.randomInt(0, categoryNames.length)]];
+			categories[
+				categoryNames[
+					crypto.randomInt(0, categoryNames.length)
+				] as keyof typeof categories
+			];
 
 		const answer = randomCategory[crypto.randomInt(0, randomCategory.length)];
 

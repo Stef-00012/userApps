@@ -1,13 +1,17 @@
-import { type ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from "discord.js";
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
-import { execSync } from "node:child_process";
+import { execSync, type ExecException } from "node:child_process";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
+import {
+	type ChatInputCommandInteraction,
+	EmbedBuilder,
+	MessageFlags,
+} from "discord.js";
 
 export default {
 	name: "console",
 	requires: [],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		const cmd = int.options.getString("command", true);
 		const ephemeral = int.options.getBoolean("personal") || false;
 
@@ -29,8 +33,10 @@ export default {
 		try {
 			output = execSync(cmd).toString().trim();
 		} catch (e) {
-			console.log(e)
-			let error = e.toString().trim();
+			const err = e as ExecException;
+
+			console.log(e);
+			let error = err.toString().trim();
 
 			if (error.length > 1000) {
 				console.log(`\n\nError Message:\n${error}`);

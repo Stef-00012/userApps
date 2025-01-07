@@ -1,7 +1,8 @@
-import type { Client } from "../../../structures/DiscordClient";
-import type { ImportTag, Tag } from "../../../types/tag";
+import type { Client } from "&/DiscordClient";
+import type { ImportTag, Tag } from "?/tag";
 import { randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
+import config from "$config";
 import axios from "axios";
 import {
 	ButtonStyle,
@@ -21,7 +22,7 @@ export default async function (
 	});
 	const file = int.options.getAttachment("file", true);
 	const overwrite = int.options.getBoolean("overwrite") || false;
-	const checkConflicts = client.config.web?.enabled;
+	const checkConflicts = config.web?.enabled;
 
 	if (file.contentType?.split(";")[0] !== "application/json")
 		return await int.reply({
@@ -76,7 +77,7 @@ export default async function (
 
 			userTags = tags as unknown as Array<Tag>;
 		} else {
-			const conflicts: Array<[Tag, ImportTag]> = [];
+			const conflicts: Array<[ImportTag, ImportTag]> = [];
 
 			for (const tag of tags) {
 				const existingTag = userTags
@@ -92,7 +93,12 @@ export default async function (
 					if (JSON.stringify(existingTag) !== JSON.stringify(tag)) {
 						if (!checkConflicts) return userTags.push(tag as Tag);
 
-						conflicts.push([existingTag, tag]);
+						const conflictExistingTag: ImportTag = {
+							name: existingTag.name,
+							data: JSON.parse(existingTag.data),
+						}
+
+						conflicts.push([conflictExistingTag, tag]);
 
 						continue;
 					}
@@ -145,7 +151,7 @@ export default async function (
 						global.conflicts = {};
 					},
 					1000 * 60 * 10,
-				);
+				) as NodeJS.Timeout;
 
 				global.conflicts[oldId] = conflict[0].data;
 				global.conflicts[newId] = conflict[1].data;
@@ -189,7 +195,12 @@ export default async function (
 						}
 
 						if (button.customId === `tag_old_${int.user.id}_${btnId}`) {
-							userTags.push(conflict[0]);
+							const conflictDataString = JSON.stringify(conflict[0].data);
+
+							userTags.push({
+								name: conflict[0].name,
+								data: conflictDataString
+							} as Tag);
 
 							await button.reply({
 								content: "Successfully kept the old tag",

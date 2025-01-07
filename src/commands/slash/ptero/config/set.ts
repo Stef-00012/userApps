@@ -1,5 +1,5 @@
-import type { Client } from "../../../../structures/DiscordClient";
 import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
+import type { Client } from "&/DiscordClient";
 
 export default async function (
 	client: Client,

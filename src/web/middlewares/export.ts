@@ -1,7 +1,7 @@
-import type { Client } from "../../structures/DiscordClient";
 import DashboardAuthMiddleware from "./dashboard/auth";
-import type { Middlewares } from "../../types/web";
+import type { Client } from "&/DiscordClient";
 import ApiAuthMiddleware from "./api/auth";
+import type { Middlewares } from "?/web";
 
 export default function (client: Client): Middlewares {
 	const middlewares: Middlewares = {

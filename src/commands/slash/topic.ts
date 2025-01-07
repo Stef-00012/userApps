@@ -1,13 +1,13 @@
 import type { ChatInputCommandInteraction } from "discord.js";
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import crypto from "node:crypto";
 
 export default {
 	name: "topic",
 	requires: [],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		const topics = [
 			"What was the last funny video you saw?",
 			"What do you do to get rid of stress?",

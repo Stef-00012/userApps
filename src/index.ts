@@ -1,15 +1,23 @@
+import express, { type Request, type Response } from "express";
+import type { NaviacConfig, ZiplineConfig } from "?/config";
 import MiddlewaresHandler from "./web/middlewares/export";
 import { GatewayIntentBits, Partials } from "discord.js";
-import type { CommandStatus } from "./types/permissions";
-import { Client } from "./structures/DiscordClient";
+import type { CommandStatus } from "?/permissions";
 import RoutesHander from "./web/routes/export";
+import { Client } from "@/structures/DiscordClient";
 import cookieParser from "cookie-parser";
+import type { TagData } from "?/tag";
+import config from "$config";
+import init from "$/init";
 import fs from "node:fs";
-import express, {
-	type NextFunction,
-	type Request,
-	type Response,
-} from "express";
+
+declare global {
+	var baseUrl: string;
+	var conflicts: {
+		[key: string]: TagData;
+	};
+	var conflictsInterval: NodeJS.Timeout;
+}
 
 const client = new Client({
 	intents: [
@@ -26,15 +34,15 @@ const client = new Client({
 
 global.conflicts = {};
 
-await client.functions.init();
+await init();
 
-if (client.config.web?.enabled) {
+if (config.web?.enabled) {
 	if (
-		!client.config.web.auth ||
-		!client.config.web.auth.clientId ||
-		!client.config.web.auth.clientSecret ||
-		!client.config.web.auth.redirectURI ||
-		!client.config.web.auth.scopes
+		!config.web.auth ||
+		!config.web.auth.clientId ||
+		!config.web.auth.clientSecret ||
+		!config.web.auth.redirectURI ||
+		!config.web.auth.scopes
 	) {
 		console.log(
 			"\x1b[31mYou must setup discord OAuth2 or disable the web UI\x1b[0m",
@@ -43,7 +51,7 @@ if (client.config.web?.enabled) {
 		process.exit(1);
 	}
 
-	if (!client.config.web.jwt || !client.config.web.jwt.secret) {
+	if (!config.web.jwt || !config.web.jwt.secret) {
 		console.log(
 			"\x1b[31mYou must add a JWT secret or disable the web UI\x1b[0m",
 		);
@@ -69,7 +77,7 @@ app.set("views", `${__dirname}/web/views`);
 
 app.use(express.static(`${__dirname}/web/public`));
 
-app.get("/", (req: Request, res: Response, next: NextFunction): any => {
+app.get("/", (_req: Request, res: Response): any => {
 	return res.redirect("/dashboard");
 });
 
@@ -111,7 +119,7 @@ for (const route in apiRoutes) {
 	console.log(`\x1b[38;2;100;37;156mLoaded the API route "${route}"\x1b[0m`);
 }
 
-app.all("*", (req: Request, res: Response, next: NextFunction): any => {
+app.all("*", (_req: Request, res: Response): any => {
 	res.sendStatus(404);
 });
 
@@ -138,7 +146,9 @@ for (const dir of commandDirs) {
 		if (
 			commandStatusJSON[commandData.name] &&
 			commandData.requires.includes("naviac") &&
-			["username", "token"].some((cfg) => !client.config.naviac?.[cfg])
+			["username", "token"].some(
+				(cfg) => !config.naviac?.[cfg as keyof NaviacConfig],
+			)
 		) {
 			console.log(
 				`\x1b[31mYou must add a N.A.V.I.A.C. username and token or disable the command "${commandData.name}" in "data/permissions/commandStatus.json"\x1b[0m`,
@@ -151,7 +161,7 @@ for (const dir of commandDirs) {
 			commandStatusJSON[commandData.name] &&
 			commandData.requires.includes("zipline") &&
 			["token", "url", "chunkSize", "maxFileSize"].some(
-				(cfg) => !client.config.zipline?.[cfg],
+				(cfg) => !config.zipline?.[cfg as keyof ZiplineConfig],
 			)
 		) {
 			console.log(
@@ -170,7 +180,7 @@ for (const dir of commandDirs) {
 		client.commands.set(commandData.name, commandData);
 
 		console.log(
-			`${colors[dir]}Loaded the ${dir} command "${
+			`${colors[dir as keyof typeof colors]}Loaded the ${dir} command "${
 				command.split(".")[0]
 			}"\x1b[0m`,
 		);
@@ -187,21 +197,21 @@ for (const event of events) {
 	);
 }
 
-client.login(client.config.token);
+client.login(config.token);
 
-if (client.config.web?.enabled) {
+if (config.web?.enabled) {
 	if (
-		!client.config.web.hostname ||
-		!client.config.web.port ||
-		typeof client.config.web.secure !== "boolean" ||
-		typeof client.config.web.keepPort !== "boolean" ||
-		!client.config.web.auth ||
-		!client.config.web.auth.clientId ||
-		!client.config.web.auth.clientSecret ||
-		!client.config.web.auth.redirectURI ||
-		!client.config.web.auth.scopes ||
-		!client.config.web.jwt ||
-		!client.config.web.jwt.secret
+		!config.web.hostname ||
+		!config.web.port ||
+		typeof config.web.secure !== "boolean" ||
+		typeof config.web.keepPort !== "boolean" ||
+		!config.web.auth ||
+		!config.web.auth.clientId ||
+		!config.web.auth.clientSecret ||
+		!config.web.auth.redirectURI ||
+		!config.web.auth.scopes ||
+		!config.web.jwt ||
+		!config.web.jwt.secret
 	) {
 		console.log(
 			`\x1b[31mYou must fill all the configs inside the "web" object or disable the web dashboard\x1b[0m`,
@@ -210,12 +220,12 @@ if (client.config.web?.enabled) {
 		process.exit(0);
 	}
 
-	global.baseUrl = `http${client.config.web.secure ? "s" : ""}://${
-		client.config.web.hostname || "localhost"
-	}${client.config.web.keepPort ? `:${client.config.web.port || 3000}` : ""}`;
+	global.baseUrl = `http${config.web.secure ? "s" : ""}://${
+		config.web.hostname || "localhost"
+	}${config.web.keepPort ? `:${config.web.port || 3000}` : ""}`;
 
-	app.listen(client.config.web.port || 3000, () => {
-		console.log(`\x1b[36mThe web UI is online on ${global.baseUrl}\x1b[0m`);
+	app.listen(config.web.port || 3000, () => {
+		console.log(`\x1b[36mThe web UI is online on ${baseUrl}\x1b[0m`);
 	});
 
 	global.conflictsInterval = setInterval(
@@ -223,5 +233,5 @@ if (client.config.web?.enabled) {
 			global.conflicts = {};
 		},
 		1000 * 60 * 10,
-	);
+	) as NodeJS.Timeout;
 }

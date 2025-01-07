@@ -1,9 +1,9 @@
-import type { Client } from "../../../structures/DiscordClient";
-import type { CommandStatus } from "../../../types/permissions";
 import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
+import type { CommandStatus } from "../../../types/permissions";
+import type { Client } from "&/DiscordClient";
 
 export default async function (
-	client: Client,
+	_client: Client,
 	int: ChatInputCommandInteraction,
 ) {
 	const commandStatusJSON: CommandStatus = await Bun.file(

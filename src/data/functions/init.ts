@@ -1,7 +1,8 @@
-import config from "../../../config";
-import cmds from "../../commands";
+import config from "$config";
+import type { CommandStatus } from "?/permissions";
+import cmds from "@/commands";
 
-export default async function (): Promise<void> {
+export default async function init(): Promise<void> {
 	const commandPermissionsFile = Bun.file(
 		`${__dirname}/../permissions/commandPermissions.json`,
 	);
@@ -29,7 +30,7 @@ export default async function (): Promise<void> {
 	if (!commandStatusFileExists) {
 		const commands = cmds.map((cmd) => cmd.name);
 
-		let commandStatus = {};
+		let commandStatus: CommandStatus = {};
 
 		for (const command of commands) {
 			commandStatus[command] = true;

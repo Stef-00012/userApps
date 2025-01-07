@@ -1,6 +1,6 @@
 import { EmbedBuilder, type ChatInputCommandInteraction } from "discord.js";
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import crypto from "node:crypto";
 import axios from "axios";
 
@@ -8,7 +8,7 @@ export default {
 	name: "animal",
 	requires: [],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		let type = int.options.getString("type");
 		let pic: string;
 

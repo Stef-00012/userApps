@@ -1,3 +1,7 @@
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
+import qrcode from "qrcode-terminal";
+import axios from "axios";
 import {
 	MessageFlags,
 	ModalBuilder,
@@ -7,16 +11,12 @@ import {
 	AttachmentBuilder,
 	type MessageContextMenuCommandInteraction,
 } from "discord.js";
-import qrcode from "qrcode-terminal";
-import axios from "axios";
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
 
 export default {
 	name: "Convert to QR Code",
 	requires: [],
 
-	async execute(client: Client, int: MessageContextMenuCommandInteraction) {
+	async execute(_client: Client, int: MessageContextMenuCommandInteraction) {
 		if (int.targetMessage.content.length <= 0)
 			return await int.reply({
 				content: "This message has no content",

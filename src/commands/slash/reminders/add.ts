@@ -1,5 +1,5 @@
-import type { Client } from "../../../structures/DiscordClient";
 import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
+import type { Client } from "&/DiscordClient";
 import { randomUUID } from "node:crypto";
 import { and, eq } from "drizzle-orm";
 import ms from "enhanced-ms";

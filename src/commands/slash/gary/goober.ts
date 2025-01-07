@@ -1,44 +1,46 @@
-import type { Client } from "../../../structures/DiscordClient";
 import type { ChatInputCommandInteraction } from "discord.js";
+import axios, { type AxiosError } from "axios";
+import type { Client } from "&/DiscordClient";
 import { EmbedBuilder } from "discord.js";
-import axios from "axios";
 
 export default async function (
-    client: Client,
-    int: ChatInputCommandInteraction,
+	_client: Client,
+	int: ChatInputCommandInteraction,
 ) {
-    await int.deferReply();
+	await int.deferReply();
 
-    try {
-        const res = await axios.get("https://garybot.dev/api/goober");
+	try {
+		const res = await axios.get("https://garybot.dev/api/goober");
 
-        const url: string = res.data.url;
+		const url: string = res.data.url;
 
-        const embed = new EmbedBuilder().setTitle("Goober").setImage(url);
+		const embed = new EmbedBuilder().setTitle("Goober").setImage(url);
 
-        await int.editReply({
-            embeds: [embed],
-        });
-    } catch (e) {
-        if (e?.response?.status === 429)
-            return await int.editReply({
-                content: "You are being ratelimited",
-            });
+		await int.editReply({
+			embeds: [embed],
+		});
+	} catch (e) {
+		const error = e as AxiosError;
 
-        if (e?.response?.status === 500)
-            return await int.editReply({
-                content: "The Gary API is currently having issues",
-            });
+		if (error?.response?.status === 429)
+			return await int.editReply({
+				content: "You are being ratelimited",
+			});
 
-        if (e?.response?.status)
-            return await int.editReply({
-                content: `The Gary API request failed with status ${e.response.status} (${e.response.statusText})`,
-            });
+		if (error?.response?.status === 500)
+			return await int.editReply({
+				content: "The Gary API is currently having issues",
+			});
 
-        console.log(e);
+		if (error?.response?.status)
+			return await int.editReply({
+				content: `The Gary API request failed with status ${error.response.status} (${error.response.statusText})`,
+			});
 
-        await int.editReply({
-            content: "Something went wrong...",
-        });
-    }
+		console.log(error);
+
+		await int.editReply({
+			content: "Something went wrong...",
+		});
+	}
 }

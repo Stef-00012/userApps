@@ -1,7 +1,8 @@
 import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import streamToBlob from "stream-to-blob";
+import config from "$config";
 import path from "node:path";
 import axios from "axios";
 import fs from "node:fs";
@@ -10,16 +11,16 @@ export default {
 	name: "upload",
 	requires: ["zipline"],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
-		if (!client.config.zipline)
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
+		if (!config.zipline)
 			return await int.reply({
 				content: "Missing Zipline auth data",
 			});
 
-		const domain = client.config.zipline.url;
-		const token = client.config.zipline.token;
-		const chunkSize = client.config.zipline.chunkSize * 1024 * 1024;
-		const maxFileSize = client.config.zipline.maxFileSize;
+		const domain = config.zipline.url;
+		const token = config.zipline.token;
+		const chunkSize = config.zipline.chunkSize * 1024 * 1024;
+		const maxFileSize = config.zipline.maxFileSize;
 
 		const chunked = int.options.getBoolean("chunked") || false;
 		const ephemeral = int.options.getBoolean("ephemeral") || false;

@@ -1,13 +1,14 @@
 import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { WhoisResult } from "?/whois";
+import type { Command } from "?/command";
 import whoiser from "whoiser";
 
 export default {
 	name: "whois",
 	requires: [],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		await int.deferReply();
 
 		const query = int.options.getString("query", true);
@@ -16,7 +17,7 @@ export default {
 
 		const firstKey = Object.keys(queryOutput)[0];
 
-		const whoisData = queryOutput[firstKey];
+		const whoisData = queryOutput[firstKey] as unknown as WhoisResult;
 
 		const embedLines = [
 			"# Domain Status",

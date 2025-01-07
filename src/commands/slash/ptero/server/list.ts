@@ -1,8 +1,8 @@
 import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
 import type { PterodactylAPIServer } from "../../../../types/pterodactyl";
-import type { Client } from "../../../../structures/DiscordClient";
+import axios, { type AxiosError } from "axios";
+import type { Client } from "&/DiscordClient";
 import { eq } from "drizzle-orm";
-import axios from "axios";
 
 export default async function (
 	client: Client,
@@ -50,12 +50,14 @@ export default async function (
 			embeds: [embed],
 		});
 	} catch (e) {
-		if (e?.response?.status === 401)
+		const error = e as AxiosError;
+
+		if (error?.response?.status === 401)
 			return await int.editReply({
 				content: "Your API key is not valid",
 			});
 
-		console.log(e);
+		console.log(error);
 
 		await int.editReply({
 			content: "Something went wrong...",

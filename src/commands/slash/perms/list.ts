@@ -1,10 +1,14 @@
-import { type ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from "discord.js";
-import type { CommandPermissions } from "../../../types/permissions";
-import type { Client } from "../../../structures/DiscordClient";
-import commands from "../../../commands"
+import {
+	type ChatInputCommandInteraction,
+	EmbedBuilder,
+	MessageFlags,
+} from "discord.js";
+import type { CommandPermissions } from "?/permissions";
+import type { Client } from "&/DiscordClient";
+import commands from "@/commands";
 
 export default async function (
-	client: Client,
+	_client: Client,
 	int: ChatInputCommandInteraction,
 ) {
 	const commandPermissionsJSON: CommandPermissions = await Bun.file(

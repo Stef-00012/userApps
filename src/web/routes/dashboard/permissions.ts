@@ -1,18 +1,14 @@
-import type { CommandPermissions } from "../../../types/permissions";
-import type { Client } from "../../../structures/DiscordClient";
+import express, { type Request, type Response } from "express";
+import type { CommandPermissions } from "?/permissions";
+import type { Client } from "&/DiscordClient";
 import path from "node:path";
-import express, {
-	type NextFunction,
-	type Request,
-	type Response,
-} from "express";
 
 export default function (client: Client) {
 	const router = express.Router();
 
 	router.get(
 		"/dashboard/permissions",
-		async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+		async (_req: Request, res: Response): Promise<any> => {
 			const username = client.user?.tag || "Unknown#0000";
 			const commands = client.commands.map((cmd) => cmd.name);
 			const permissionsPath = path.join(

@@ -530,14 +530,8 @@ export default [
 								value: "wide",
 							},
 						],
-						required: false
+						required: false,
 					},
-					// {
-					// 	name: "bedrock",
-					// 	description: "If the player is a bedrock player",
-					// 	type: ApplicationCommandOptionType.Boolean,
-					// 	required: false,
-					// }
 				],
 			},
 			{

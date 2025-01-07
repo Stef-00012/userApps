@@ -1,16 +1,22 @@
-import { type ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from "discord.js";
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
-import axios from "axios";
+import axios, { type AxiosError } from "axios";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
+import config from "$config";
+import {
+	type ChatInputCommandInteraction,
+	EmbedBuilder,
+	MessageFlags,
+} from "discord.js";
 
 export default {
 	name: "ask",
 	requires: ["naviac"],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
-		if (!client.config.naviac) return await int.reply({
-			content: "Missing N.A.V.I.A.C. auth data"
-		})
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
+		if (!config.naviac)
+			return await int.reply({
+				content: "Missing N.A.V.I.A.C. auth data",
+			});
 
 		const question = int.options.getString("question", true);
 		const ephemeral = int.options.getBoolean("personal") || false;
@@ -27,8 +33,8 @@ export default {
 				},
 				{
 					auth: {
-						username: client.config.naviac.username,
-						password: client.config.naviac.token,
+						username: config.naviac.username,
+						password: config.naviac.token,
 					},
 				},
 			);
@@ -51,7 +57,8 @@ export default {
 			if (match) {
 				embed.setImage(match[1]).setFooter({
 					text: `${embed.data.footer?.text} | Image generated with the help of Pollinations AI\'s services`,
-					iconURL: "https://cdn.discordapp.com/avatars/975365560298795008/632ac9e6edf7517fa9378454c8600bdf.png?size=4096",
+					iconURL:
+						"https://cdn.discordapp.com/avatars/975365560298795008/632ac9e6edf7517fa9378454c8600bdf.png?size=4096",
 				});
 
 				if (response.replace(regex, "").length > 0) {
@@ -80,22 +87,24 @@ export default {
 				embeds: [embed],
 			});
 		} catch (e) {
-			if (e?.response?.status === 429)
+			const error = e as AxiosError;
+
+			if (error?.response?.status === 429)
 				return await int.editReply({
 					content: "You are being ratelimited",
 				});
 
-			if (e?.response?.status === 500)
+			if (error?.response?.status === 500)
 				return await int.editReply({
 					content: "The N.A.V.I.A.C. API is currently having issues",
 				});
 
-			if (e?.response?.status)
+			if (error?.response?.status)
 				return await int.editReply({
-					content: `The N.A.V.I.A.C. API request failed with status ${e.response.status} (${e.response.statusText})`,
+					content: `The N.A.V.I.A.C. API request failed with status ${error.response.status} (${error.response.statusText})`,
 				});
 
-			console.log(e);
+			console.log(error);
 
 			await int.editReply({
 				content: "Something went wrong...",

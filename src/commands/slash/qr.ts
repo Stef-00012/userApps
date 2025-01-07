@@ -1,5 +1,5 @@
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import qrcode from "qrcode-terminal";
 import axios from "axios";
 import {
@@ -12,7 +12,7 @@ export default {
 	name: "qr",
 	requires: [],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		const text = int.options.getString("text", true);
 		const type = int.options.getString("type") || "text";
 

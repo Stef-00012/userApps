@@ -1,16 +1,14 @@
-import type { Client } from "../../../structures/DiscordClient";
-import express, {
-	type NextFunction,
-	type Request,
-	type Response,
-} from "express";
+import express, { type Request, type Response } from "express";
+import type { Client } from "&/DiscordClient";
 
 export default function (client: Client) {
-    const router = express.Router()
+	const router = express.Router();
 
-    router.get('/invite', (req: Request, res: Response, next: NextFunction): any => {
-        res.redirect(`https://discord.com/oauth2/authorize?client_id=${client.user?.id}`)
-    })
+	router.get("/invite", (_req: Request, res: Response): any => {
+		res.redirect(
+			`https://discord.com/oauth2/authorize?client_id=${client.user?.id}`,
+		);
+	});
 
-    return router;
+	return router;
 }

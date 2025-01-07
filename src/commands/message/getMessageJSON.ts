@@ -1,5 +1,5 @@
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import {
 	type MessageContextMenuCommandInteraction,
 	AttachmentBuilder,
@@ -11,8 +11,8 @@ export default {
 	name: "Get Message JSON",
 	requires: [],
 
-	async execute(client: Client, int: MessageContextMenuCommandInteraction) {
-		const plainMessageJSON = JSON.stringify(int.targetMessage, null, 2)
+	async execute(_client: Client, int: MessageContextMenuCommandInteraction) {
+		const plainMessageJSON = JSON.stringify(int.targetMessage, null, 2);
 		const messageJSON = JSON.stringify(int.targetMessage, null, 2).replaceAll(
 			"`",
 			"\\`",
@@ -27,8 +27,8 @@ export default {
 		);
 
 		const attachment = new AttachmentBuilder(Buffer.from(plainMessageJSON), {
-			name: "message-data.json"
-		})
+			name: "message-data.json",
+		});
 
 		await int.reply({
 			embeds: [embed],

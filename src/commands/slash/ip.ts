@@ -1,13 +1,13 @@
 import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import axios from "axios";
 
 export default {
 	name: "ip",
 	requires: [],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		const ip = int.options.getString("ip", true);
 
 		await int.deferReply();

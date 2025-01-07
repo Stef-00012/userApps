@@ -1,19 +1,18 @@
-import type { Client } from "../../structures/DiscordClient";
-import axios from "axios";
+import axios, { type AxiosError } from "axios";
+import config from "$config";
 
-export default async function (
-	client: Client,
+export default async function revokeAccessToken(
 	token: string,
 	tokenType: string,
 ): Promise<boolean | null> {
-	if (!client.config.web || !client.config.web.enabled) return null;
+	if (!config.web || !config.web.enabled) return null;
 
 	try {
 		await axios.post(
 			"https://discord.com/api/oauth2/token/revoke",
 			new URLSearchParams({
-				client_id: client.config.web.auth.clientId,
-				client_secret: client.config.web.auth.clientSecret,
+				client_id: config.web.auth.clientId,
+				client_secret: config.web.auth.clientSecret,
 				token,
 				token_type_hint: tokenType,
 			}).toString(),
@@ -25,7 +24,9 @@ export default async function (
 		);
 
 		return true;
-	} catch (error) {
+	} catch (e) {
+		const error = e as AxiosError;
+
 		console.error(error?.response?.data || error);
 		return false;
 	}

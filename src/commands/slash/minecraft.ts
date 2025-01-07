@@ -1,7 +1,7 @@
-import { avaibleCropTypes, avaibleRenderTypes } from "../../data/constants/minecraftSkin";
-import type { Client } from "../../structures/DiscordClient";
-import type { CropType } from "../../types/minecraftSkin";
-import type { Command } from "../../types/command";
+import { avaibleCropTypes, avaibleRenderTypes } from "#/minecraftSkin";
+import type { CropType, RenderType } from "?/minecraftSkin";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import type {
 	AutocompleteInteraction,
 	ChatInputCommandInteraction,
@@ -11,7 +11,7 @@ export default {
 	name: "minecraft",
 	requires: [],
 
-	async autocomplete(client: Client, int: AutocompleteInteraction) {
+	async autocomplete(_client: Client, int: AutocompleteInteraction) {
 		const subcommand = int.options.getSubcommand();
 
 		if (subcommand !== "skin") return;
@@ -30,18 +30,24 @@ export default {
 			}
 
 			case "crop-type": {
-				const renderType = int.options.getString("render-type", true);
+				const renderType = int.options.getString(
+					"render-type",
+					true,
+				) as RenderType;
 
 				const matches = (avaibleCropTypes[renderType] || [])
 					.map((cropType: CropType) => ({
 						name: cropType,
 						value: cropType,
 					}))
-					.filter((cropType: {
-						name: CropType,
-						value: CropType
-					}) =>
-						cropType.name.toLowerCase().startsWith(option.value.toLowerCase()),
+					.filter(
+						(cropType: {
+							name: CropType;
+							value: CropType;
+						}) =>
+							cropType.name
+								.toLowerCase()
+								.startsWith(option.value.toLowerCase()),
 					);
 
 				return await int.respond(matches);

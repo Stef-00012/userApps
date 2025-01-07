@@ -1,5 +1,5 @@
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import {
 	ButtonStyle,
 	ModalBuilder,
@@ -18,7 +18,7 @@ export default {
 	name: "embed",
 	requires: [],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		const embedTitle = int.options.getString("title") ?? null;
 		const embedDescription = int.options.getString("description") ?? null;
 		const embedURL = int.options.getString("url") ?? null;

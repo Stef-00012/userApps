@@ -1,6 +1,7 @@
-import type { Client } from "../../structures/DiscordClient";
-import type { Routes } from "../../types/web";
-import type { Router } from "express";
+import config from "$config";
+
+import type { Client } from "&/DiscordClient";
+import type { Routes } from "?/web";
 
 import DashboardHomeRoute from "./dashboard/home";
 import DashboardCommandsRoute from "./dashboard/commands";
@@ -17,7 +18,6 @@ import TagPreviewRoute from "./tagPreview/embedBuilder";
 
 import InviteRoute from "./misc/invite";
 import DiscordWebhook from "./misc/discordWebhook";
-
 
 export default function (client: Client): Routes {
 	const routes: Routes = {
@@ -38,12 +38,12 @@ export default function (client: Client): Routes {
 		},
 	};
 
-	if (client.config.web?.discordWebhook?.enabled) {
-		routes.noAuth.discordWebhook = DiscordWebhook(client)
+	if (config.web?.discordWebhook?.enabled) {
+		routes["noAuth"]["discordWebhook"] = DiscordWebhook(client);
 	}
 
-	if (client.config.public) {
-		routes.noAuth.invite = InviteRoute(client)
+	if (config.public) {
+		routes["noAuth"]["invite"] = InviteRoute(client);
 	}
 
 	return routes;

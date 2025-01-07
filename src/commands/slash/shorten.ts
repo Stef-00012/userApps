@@ -1,21 +1,22 @@
 import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
-import type { ZiplineRequestData } from "../../types/zipline";
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { ZiplineRequestData } from "?/zipline";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
+import config from "$config";
 import axios from "axios";
 
 export default {
 	name: "shorten",
 	requires: ["zipline"],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
-		if (!client.config.zipline)
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
+		if (!config.zipline)
 			return await int.reply({
 				content: "Missing Zipline auth data",
 			});
 
-		const domain = client.config.zipline.url;
-		const token = client.config.zipline.token;
+		const domain = config.zipline.url;
+		const token = config.zipline.token;
 
 		const ephemeral = int.options.getBoolean("ephemeral") || false;
 		const url = int.options.getString("url", true);

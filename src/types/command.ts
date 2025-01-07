@@ -1,4 +1,4 @@
-import type { Client } from "../structures/DiscordClient";
+import type { Client } from "&/DiscordClient";
 import type {
 	AutocompleteInteraction,
 	ChatInputCommandInteraction,

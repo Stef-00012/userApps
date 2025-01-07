@@ -13,7 +13,7 @@ export default {
 	name: "colorpicker",
 	requires: [],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		const hex = int.options.getString("hex", true).replace("#", "");
 		const hexCodeRegex = /^([A-Fa-f0-9]{6})$/.test(hex);
 
@@ -28,10 +28,10 @@ export default {
 		const canvas = createCanvas(250, 250);
 		const ctx = canvas.getContext("2d");
 
-		ctx.beginPath();
-		ctx.fillStyle = hex.startsWith("#") ? hex : `#${hex}`;
-		ctx.fillRect(0, 0, 250, 250);
-		ctx.closePath();
+		ctx["beginPath"]();
+		ctx["fillStyle"] = hex.startsWith("#") ? hex : `#${hex}`;
+		ctx["fillRect"](0, 0, 250, 250);
+		ctx["closePath"]();
 
 		const colorImage = canvas.toBuffer("image/png");
 

@@ -1,5 +1,6 @@
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
+import oggToMp3 from "$/oggToMp3";
 import axios from "axios";
 import os from "node:os";
 import fs from "node:fs";
@@ -13,7 +14,7 @@ export default {
 	name: "Download Voice Message",
 	requires: [],
 
-	async execute(client: Client, int: MessageContextMenuCommandInteraction) {
+	async execute(_client: Client, int: MessageContextMenuCommandInteraction) {
 		const tmpFolder = os.tmpdir();
 		const tmpPath = `${tmpFolder}/downloadAudio.ogg`;
 		const tmpPathOutput = `${tmpFolder}/downloadAudio.mp3`;
@@ -46,7 +47,7 @@ export default {
 		try {
 			await Bun.write(tmpPath, data);
 
-			await client.functions.oggToMp3(tmpPath, tmpPathOutput);
+			await oggToMp3(tmpPath, tmpPathOutput);
 		} catch (e) {
 			console.log(e);
 

@@ -1,5 +1,5 @@
-import type { Client } from "../../../structures/DiscordClient";
-import type { Tag, TagData } from "../../../types/tag";
+import type { Client } from "&/DiscordClient";
+import type { Tag, TagData } from "?/tag";
 import { eq } from "drizzle-orm";
 import {
 	AttachmentBuilder,

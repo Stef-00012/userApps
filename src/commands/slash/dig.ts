@@ -1,6 +1,6 @@
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
-import { execSync } from "node:child_process";
+import { execSync, type ExecException } from "node:child_process";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import {
 	type AutocompleteInteraction,
 	type ChatInputCommandInteraction,
@@ -11,7 +11,7 @@ export default {
 	name: "dig",
 	requires: [],
 
-	async autocomplete(client: Client, int: AutocompleteInteraction) {
+	async autocomplete(_client: Client, int: AutocompleteInteraction) {
 		const value = int.options.getFocused();
 
 		const records = [
@@ -65,7 +65,7 @@ export default {
 		await int.respond(matches);
 	},
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		const domain = int.options.getString("domain", true);
 		const recordType = int.options.getString("record") || "A";
 		const short = int.options.getBoolean("short") || false;
@@ -83,7 +83,9 @@ export default {
 		try {
 			output = execSync(command).toString().trim();
 		} catch (e) {
-			const error = e.stderr.toString().trim();
+			const err = e as ExecException;
+
+			const error = err.stderr?.toString().trim() || "";
 
 			if (error.includes("not found"))
 				return await int.editReply({

@@ -1,7 +1,7 @@
-import type { Client } from "../../../structures/DiscordClient";
 import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
-import type { Tag } from "../../../types/tag";
+import type { Client } from "&/DiscordClient";
 import { eq, and } from "drizzle-orm";
+import type { Tag } from "?/tag";
 
 export default async function (
 	client: Client,

@@ -1,6 +1,8 @@
-import type { Client } from "../../../structures/DiscordClient";
-import type { CommandStatus } from "../../../types/permissions";
 import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
+import type { NaviacConfig, ZiplineConfig } from "@/types/config";
+import type { CommandStatus } from "../../../types/permissions";
+import type { Client } from "&/DiscordClient";
+import config from "$config";
 
 export default async function (
 	client: Client,
@@ -28,7 +30,9 @@ export default async function (
 
 	if (
 		commandData.requires.includes("naviac") &&
-		["username", "token"].some((cfg) => !client.config?.naviac?.[cfg])
+		["username", "token"].some(
+			(cfg) => !config?.naviac?.[cfg as keyof NaviacConfig],
+		)
 	) {
 		return await int.reply({
 			content:
@@ -40,7 +44,7 @@ export default async function (
 	if (
 		commandData.requires.includes("zipline") &&
 		["token", "url", "chunkSize", "maxFileSize"].some(
-			(cfg) => !client.config?.zipline?.[cfg],
+			(cfg) => !config?.zipline?.[cfg as keyof ZiplineConfig],
 		)
 	) {
 		return await int.reply({

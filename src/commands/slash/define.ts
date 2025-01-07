@@ -1,14 +1,15 @@
 import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+// @ts-ignore
 import ubdict from "@dmzoneill/urban-dictionary";
+import type { Client } from "&/DiscordClient";
 import replace from "string-replace-async";
+import type { Command } from "?/command";
 
 export default {
 	name: "define",
 	requires: [],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		const term = int.options.getString("term", true);
 		await int.deferReply();
 

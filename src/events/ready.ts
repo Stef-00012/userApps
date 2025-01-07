@@ -1,9 +1,10 @@
-import type { Client } from "../structures/DiscordClient";
+import axios, { type AxiosError } from "axios";
+import type { Client } from "&/DiscordClient";
 import packageJson from "../../package.json";
 import { EmbedBuilder } from "discord.js";
 import { and, eq } from "drizzle-orm";
-import Commands from "../commands";
-import axios from "axios";
+import Commands from "@/commands";
+import config from "$config";
 
 export default async function (client: Client) {
 	console.log(
@@ -73,14 +74,16 @@ export default async function (client: Client) {
 			Commands,
 			{
 				headers: {
-					Authorization: `Bot ${client.config.token}`,
+					Authorization: `Bot ${config.token}`,
 					"Content-Type": "application/json; charset=UTF-8",
 					"User-Agent": `DiscordBot (discord.js, ${packageJson.dependencies["discord.js"]} (modified))`,
 				},
 			},
 		);
 	} catch (err) {
-		console.error(JSON.stringify(err.response.data, null, 2));
+		const error = err as AxiosError;
+
+		console.error(JSON.stringify(error.response?.data, null, 2));
 	}
 
 	if (!commands || commands.size === 0) {

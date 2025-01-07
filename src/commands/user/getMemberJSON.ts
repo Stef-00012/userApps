@@ -1,5 +1,5 @@
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import {
 	EmbedBuilder,
 	MessageFlags,
@@ -11,8 +11,8 @@ export default {
 	name: "Get Member JSON",
 	requires: [],
 
-	async execute(client: Client, int: UserContextMenuCommandInteraction) {
-		const plainMemberJSON = JSON.stringify(int.targetMember, null, 2)
+	async execute(_client: Client, int: UserContextMenuCommandInteraction) {
+		const plainMemberJSON = JSON.stringify(int.targetMember, null, 2);
 		const memberJSON = JSON.stringify(int.targetMember, null, 2).replaceAll(
 			"`",
 			"\\`",
@@ -27,8 +27,8 @@ export default {
 		);
 
 		const attachment = new AttachmentBuilder(Buffer.from(plainMemberJSON), {
-			name: "member-data.json"
-		})
+			name: "member-data.json",
+		});
 
 		await int.reply({
 			embeds: [embed],

@@ -1,9 +1,10 @@
-import type { CommandPermissions } from "../../../types/permissions";
-import type { Client } from "../../../structures/DiscordClient";
 import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
+import type { CommandPermissions } from "?/permissions";
+import type { Client } from "&/DiscordClient";
+import config from "$config";
 
 export default async function (
-	client: Client,
+	_client: Client,
 	int: ChatInputCommandInteraction,
 ) {
 	const commandPermissionsJSON: CommandPermissions = await Bun.file(
@@ -29,11 +30,7 @@ export default async function (
 		});
 
 	commandPermissionsJSON[commandName] = Array.from(
-		new Set([
-			user,
-			...client.config.owners,
-			...commandPermissionsJSON[commandName],
-		]),
+		new Set([user, ...config.owners, ...commandPermissionsJSON[commandName]]),
 	);
 
 	Bun.write(

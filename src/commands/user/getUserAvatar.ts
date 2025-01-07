@@ -1,5 +1,5 @@
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import {
 	EmbedBuilder,
 	MessageFlags,
@@ -10,7 +10,7 @@ export default {
 	name: "Get User Avatar",
 	requires: [],
 
-	async execute(client: Client, int: UserContextMenuCommandInteraction) {
+	async execute(_client: Client, int: UserContextMenuCommandInteraction) {
 		if (!int.targetUser.avatar)
 			return await int.reply({
 				content: "The user doesn't have any avatar",

@@ -1,25 +1,26 @@
 import type { APIUser, RESTPostOAuth2AccessTokenResult } from "discord.js";
-import type { Client } from "../../structures/DiscordClient";
+import type { Client } from "&/DiscordClient";
+import axios, { type AxiosError } from "axios";
 import jwt from "jsonwebtoken";
-import axios from "axios";
+import config from "$config";
 
-export default async function (
+export default async function getAccessToken(
 	client: Client,
 	code: string,
 ): Promise<string | null> {
-	if (!code || !client.config.web || !client.config.web.enabled) return null;
+	if (!code || !config.web || !config.web.enabled) return null;
 
 	try {
 		const tokenData: RESTPostOAuth2AccessTokenResult = (
 			await axios.post(
 				"https://discord.com/api/oauth2/token",
 				new URLSearchParams({
-					client_id: client.config.web.auth.clientId,
-					client_secret: client.config.web.auth.clientSecret,
+					client_id: config.web.auth.clientId,
+					client_secret: config.web.auth.clientSecret,
 					code,
 					grant_type: "authorization_code",
-					redirect_uri: client.config.web.auth.redirectURI,
-					scope: client.config.web.auth.scopes,
+					redirect_uri: config.web.auth.redirectURI,
+					scope: config.web.auth.scopes,
 				}).toString(),
 				{
 					headers: {
@@ -63,9 +64,11 @@ export default async function (
 			{
 				userId: userData.id,
 			},
-			client.config.web.jwt.secret,
+			config.web.jwt.secret,
 		);
-	} catch (error) {
+	} catch (e) {
+		const error = e as AxiosError;
+
 		console.error(error?.response?.data || error);
 		return null;
 	}

@@ -1,19 +1,12 @@
-import type { Client } from "../../../structures/DiscordClient";
-import express, {
-	type NextFunction,
-	type Request,
-	type Response,
-} from "express";
+import type { Client } from "&/DiscordClient";
+import express, { type Request, type Response } from "express";
 
-export default function (client: Client) {
+export default function (_client: Client) {
 	const router = express.Router();
 
-	router.get(
-		"/unauthorized",
-		(req: Request, res: Response, next: NextFunction): any => {
-			res.render("auth/unauthorized");
-		},
-	);
+	router.get("/unauthorized", (_req: Request, res: Response): any => {
+		res.render("auth/unauthorized");
+	});
 
 	return router;
 }

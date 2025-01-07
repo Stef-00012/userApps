@@ -1,8 +1,8 @@
-import type { PterodactylPowerActions } from "../../../../types/pterodactyl";
-import type { Client } from "../../../../structures/DiscordClient";
 import type { ChatInputCommandInteraction } from "discord.js";
+import type { PterodactylPowerActions } from "?/pterodactyl";
+import axios, { type AxiosError } from "axios";
+import type { Client } from "&/DiscordClient";
 import { eq } from "drizzle-orm";
-import axios from "axios";
 
 export default async function (
 	client: Client,
@@ -47,12 +47,14 @@ export default async function (
 			content: `Successfully ran the \`${action}\` power action on the server with ID \`${id}\``,
 		});
 	} catch (e) {
-		if (e?.response?.status === 401)
+		const error = e as AxiosError;
+
+		if (error?.response?.status === 401)
 			return await int.editReply({
 				content: "Your API key is not valid",
 			});
 
-		console.log(e);
+		console.log(error);
 
 		await int.editReply({
 			content: "Something went wrong...",

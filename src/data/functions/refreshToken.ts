@@ -1,24 +1,23 @@
 import type { RESTPostOAuth2RefreshTokenResult } from "discord.js";
-import type { Client } from "../../structures/DiscordClient";
-import type { DatabaseTokenData } from "../../types/discord";
+import type { DatabaseTokenData } from "?/discord";
+import config from "$config";
 import axios from "axios";
 
-export default async function (
-	client: Client,
+export default async function refreshToken(
 	token: string,
 ): Promise<DatabaseTokenData | null> {
-	if (!client.config.web || !client.config.web.enabled) return null;
+	if (!config.web || !config.web.enabled) return null;
 
 	try {
 		const newTokenData: RESTPostOAuth2RefreshTokenResult = (
 			await axios.post(
 				"https://discord.com/api/oauth2/token",
 				new URLSearchParams({
-					client_id: client.config.web.auth.clientId,
-					client_secret: client.config.web.auth.clientSecret,
+					client_id: config.web.auth.clientId,
+					client_secret: config.web.auth.clientSecret,
 					grant_type: "refresh_token",
-					redirect_uri: client.config.web.auth.redirectURI,
-					scope: client.config.web.auth.scopes,
+					redirect_uri: config.web.auth.redirectURI,
+					scope: config.web.auth.scopes,
 					refresh_token: token,
 				}).toString(),
 				{

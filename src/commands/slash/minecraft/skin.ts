@@ -1,34 +1,32 @@
-import type { Client } from "../../../structures/DiscordClient";
-import type { Player } from "../../../types/minecraftPlayer";
+import getMinecraftSkin from "$/getMinecraftSkin";
+import type { Client } from "&/DiscordClient";
 import {
 	avaibleCropTypes,
-	customSkinsConfig,
 	renderTypes,
-} from "../../../data/constants/minecraftSkin";
+} from "#/minecraftSkin";
 import type {
 	CropType,
 	RenderType,
 	SkinType,
-} from "../../../types/minecraftSkin";
-import axios from "axios";
+} from "?/minecraftSkin";
 import {
+	AttachmentBuilder,
 	type ChatInputCommandInteraction,
 	EmbedBuilder,
 	MessageFlags,
 } from "discord.js";
 
 export default async function (
-	client: Client,
+	_client: Client,
 	int: ChatInputCommandInteraction,
 ) {
-	let renderType: RenderType | "custom" = int.options.getString(
+	const renderType: RenderType | "custom" = int.options.getString(
 		"render-type",
 		true,
 	) as RenderType;
 	const cropType = int.options.getString("crop-type", true) as CropType;
 
-	let skinType =
-		(int.options.getString("skin-type", false) as SkinType) || "wide";
+	const skinType = (int.options.getString("skin-type", false) || "wide") as SkinType;
 
 	const defaultSkin = skinType === "wide" ? "MHF_Steve" : "MHF_Alex";
 
@@ -57,51 +55,30 @@ export default async function (
 
 	await int.deferReply();
 
-	try {
-		const playerInfo = await axios.get(`https://starlightskins.lunareclipse.studio/info/user/${player}`);
-
-		const playerData = playerInfo.data as Player;
-
-		if (playerData.skinType) skinType = playerData.skinType;
-	} catch (e) {}
-
-	const urlParams = new URLSearchParams({
+	const res = await getMinecraftSkin({
+		renderType,
 		skinType,
-	});
+		cropType,
+		skinUrl,
+		player,
+	})
 
-	const skinConfig = customSkinsConfig[renderType];
+	if (res.error) return int.editReply({
+		content: res.error
+	})
 
-	if (skinConfig) {
-		const url = `${global.baseUrl}/skinModels/${renderType}`;
+	console.log(res)
 
-		urlParams.append("wideModel", `${url}/wide.obj`);
-		urlParams.append("slimModel", `${url}/slim.obj`);
-
-		if (skinConfig.cameraPosition)
-			urlParams.append(
-				"cameraPosition",
-				JSON.stringify(skinConfig.cameraPosition),
-			);
-
-		if (skinConfig.cameraFocalPoint)
-			urlParams.append(
-				"cameraFocalPoint",
-				JSON.stringify(skinConfig.cameraFocalPoint),
-			);
-
-		renderType = "custom";
-	}
-
-	if (skinUrl) urlParams.append("skinUrl", skinUrl);
-
-	const url = `https://starlightskins.lunareclipse.studio/render/${renderType}/${player}/${cropType}?${urlParams.toString()}`;
+	const attachment = new AttachmentBuilder(res.image, {
+		name: "skin.png",
+	})
 
 	const embed = new EmbedBuilder()
 		.setAuthor({
 			name: "Minecraft Player Skin",
 		})
 		.setTitle(skinUrl || player)
-		.setImage(url)
+		.setImage("attachment://skin.png")
 		.addFields([
 			{
 				name: "Render Type",
@@ -117,7 +94,8 @@ export default async function (
 
 	if (skinUrl) embed.setURL(skinUrl);
 
-	await int.reply({
+	await int.editReply({
 		embeds: [embed],
+		files: [attachment],
 	});
 }

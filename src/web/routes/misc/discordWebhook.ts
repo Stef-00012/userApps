@@ -1,24 +1,18 @@
-import type { Client } from "../../../structures/DiscordClient";
-import axios from "axios";
+import type { DiscordWebhookBody, DiscordWebhookTemplates } from "?/web";
+import express, { type Request, type Response } from "express";
+import type { Client } from "&/DiscordClient";
+import config from "$config";
 import nacl from "tweetnacl";
-import type {
-	DiscordWebhookBody,
-	DiscordWebhookTemplates,
-} from "../../../types/web";
-import express, {
-	type NextFunction,
-	type Request,
-	type Response,
-} from "express";
+import axios from "axios";
 
 export default function (client: Client) {
 	const router = express.Router();
 
-	const publicKey = client.config?.web?.discordWebhook?.public_key;
+	const publicKey = config?.web?.discordWebhook?.public_key;
 
 	router.post(
 		"/discord/webhook",
-		async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+		async (req: Request, res: Response): Promise<any> => {
 			if (!publicKey) return res.sendStatus(404);
 
 			const body = req.body as DiscordWebhookBody;
@@ -41,15 +35,15 @@ export default function (client: Client) {
 			if (body.event?.type === "APPLICATION_AUTHORIZED") {
 				res.sendStatus(204);
 
-				const urls = client.config.web?.discordWebhook?.urls;
+				const urls = config.web?.discordWebhook?.urls;
 
 				if (!urls || urls.length <= 0) return;
 
 				const titleTemplate =
-					client.config.web?.discordWebhook?.message.title ||
+					config.web?.discordWebhook?.message.title ||
 					"A user has just installed {{bot}}";
 				const messageTemplate =
-					client.config.web?.discordWebhook?.message.body ||
+					config.web?.discordWebhook?.message.body ||
 					"{{user}} ({{user.id}}) has just installed {{bot}} at {{time}}";
 
 				const title = replaceTemplate(titleTemplate, {
@@ -68,7 +62,7 @@ export default function (client: Client) {
 
 				try {
 					await axios.post(
-						`${process.env.APPRISE_URL}/notify`,
+						`${process.env["APPRISE_URL"]}/notify`,
 						{
 							urls,
 							title,

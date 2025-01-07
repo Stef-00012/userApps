@@ -1,6 +1,10 @@
-import { type ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from "discord.js";
-import type { Client } from "../../../structures/DiscordClient";
+import type { Client } from "&/DiscordClient";
 import { and, eq } from "drizzle-orm";
+import {
+	type ChatInputCommandInteraction,
+	EmbedBuilder,
+	MessageFlags,
+} from "discord.js";
 
 export default async function (
 	client: Client,

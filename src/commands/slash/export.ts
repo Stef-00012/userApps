@@ -1,9 +1,9 @@
-import type { Client } from "../../structures/DiscordClient";
-import type { Command } from "../../types/command";
+import type { Client } from "&/DiscordClient";
+import type { Command } from "?/command";
 import path from "node:path";
 import fs from "node:fs";
 import {
-AttachmentBuilder,
+	AttachmentBuilder,
 	type ChatInputCommandInteraction,
 } from "discord.js";
 
@@ -11,7 +11,7 @@ export default {
 	name: "export",
 	requires: [],
 
-	async execute(client: Client, int: ChatInputCommandInteraction) {
+	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		const inputPath = int.options.getString("path", true);
 
 		const filePath = path.join(process.cwd(), inputPath);

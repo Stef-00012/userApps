@@ -20,7 +20,7 @@ export interface Middlewares {
 export interface DiscordWebhookTemplates {
 	userId: string;
 	user: string;
-    time: string;
+	time: string;
 	bot: string;
 }
 
