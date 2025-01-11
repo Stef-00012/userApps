@@ -9,6 +9,7 @@ on:
       - "config.js"
       - "package.json"
       - "drizzle.config.js"
+      - .github/workflows/docker.yml
 
   workflow_dispatch:
 
@@ -21,6 +22,11 @@ env:
 
 jobs:
   build-and-deploy:
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     name: Build and Deploy
     runs-on: ubuntu-latest
 
