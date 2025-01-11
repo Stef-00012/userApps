@@ -16,9 +16,9 @@ services:
         image: caronc/apprise:latest
 
     bot:
-        image: stefdp/discord-user-apps
         ports:
             - 3000:3000
+        build: .
         container_name: discord-user-apps
         restart: unless-stopped
         env_file:

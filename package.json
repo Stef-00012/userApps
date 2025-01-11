@@ -6,10 +6,15 @@
 	"scripts": {
 		"db:transfer": "rm -f ./data.db && bun run db:setup && bun run scripts/transferDB.js",
 		"db:setup": "bun run db:generate && bun run db:migrate",
-		"build": "bun run db:setup && bun run start",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
-		"start": "bun run src/index.ts"
+		"build": "bun run db:setup && bun run start",
+		"start": "bun run src/index.ts",
+		"compose:up": "docker compose up",
+		"compose:down": "docker compose down",
+		"compose:build-dev": "docker compose --file docker-compose.dev.yml up --build",
+		"compose:down-dev": "docker compose --file docker-compose.dev.yml down",
+		"compose:up-dev": "docker compose --file docker-compose.dev.yml up"
 	},
 	"author": "admin@stefdp.com",
 	"license": "MIT",
