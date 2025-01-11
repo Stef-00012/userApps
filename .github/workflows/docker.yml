@@ -54,8 +54,8 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/Stef-00012/${{ env.DOCKER_IMAGE_NAME }}:latest
-            ghcr.io/Stef-00012/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.version.outputs.version }}
-            
+            ghcr.io/stef-00012/${{ env.DOCKER_IMAGE_NAME }}:latest
+            ghcr.io/stef-00012/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.version.outputs.version }}
+
             ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
             ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ steps.version.outputs.version }}
