@@ -2,7 +2,7 @@
 	"name": "discord-user-apps",
 	"version": "1.1.2",
 	"description": "",
-	"main": "index.js",
+	"main": "src/index.ts",
 	"scripts": {
 		"db:transfer": "rm -f ./data.db && bun run db:setup && bun run scripts/transferDB.js",
 		"db:setup": "bun run db:generate && bun run db:migrate",
@@ -11,7 +11,7 @@
 		"db:migrate": "drizzle-kit migrate",
 		"start": "bun run src/index.ts"
 	},
-	"author": "admin@stefdp.lol",
+	"author": "admin@stefdp.com",
 	"license": "MIT",
 	"dependencies": {
 		"@dmzoneill/urban-dictionary": "^3.0.3",
