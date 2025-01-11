@@ -11,6 +11,9 @@ export default {
 		chunkSize: Number.parseInt(String(process.env["ZIPLINE_CHUNK_SIZE"])) || 20,
 		maxFileSize:
 			Number.parseInt(String(process.env["ZIPLINE_MAX_FILE_SIZE"])) || 1024,
+		version: ["v3", "v4"].includes(process.env["ZIPLINE_VERSION"] as string)
+			? process.env["ZIPLINE_VERSION"]
+			: "v3",
 	},
 
 	naviac: {

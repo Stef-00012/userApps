@@ -1,15 +1,61 @@
-import { MessageFlags, type ChatInputCommandInteraction } from "discord.js";
+import getZiplineFolders from "$/getZiplineFolders";
+import { expirations, formats } from "#/zipline";
+import uploadToZipline from "$/uploadToZipline";
 import type { Client } from "&/DiscordClient";
 import type { Command } from "?/command";
-import streamToBlob from "stream-to-blob";
+import { Blob } from "node:buffer";
 import config from "$config";
-import path from "node:path";
 import axios from "axios";
-import fs from "node:fs";
+import {
+	type AutocompleteInteraction,
+	MessageFlags,
+	type ChatInputCommandInteraction,
+} from "discord.js";
+import type { ZiplineUploadConfig } from "?/zipline";
 
 export default {
 	name: "upload",
 	requires: ["zipline"],
+
+	async autocomplete(_client: Client, int: AutocompleteInteraction) {
+		const option = int.options.getFocused(true);
+
+		switch (option.name) {
+			case "expiration": {
+				let matches = expirations
+					.map((match) => ({
+						name: match,
+						value: match,
+					}))
+					.filter((expiration) =>
+						expiration.value
+							?.toLowerCase()
+							.startsWith(option.value.toLowerCase()),
+					);
+
+				if (matches.length > 25) matches = matches.slice(0, 24);
+
+				return await int.respond(matches);
+			}
+
+			case "folder": {
+				if (config.zipline?.version !== "v4") return await int.respond([]);
+
+				const folders = (await getZiplineFolders()).map((folder) => ({
+					name: folder.name,
+					value: folder.id,
+				}));
+
+				let matches = folders.filter((folder) =>
+					folder.name.toLowerCase().startsWith(option.value.toLowerCase()),
+				);
+
+				if (matches.length > 25) matches = matches.slice(0, 24);
+
+				return await int.respond(matches);
+			}
+		}
+	},
 
 	async execute(_client: Client, int: ChatInputCommandInteraction) {
 		if (!config.zipline)
@@ -17,26 +63,60 @@ export default {
 				content: "Missing Zipline auth data",
 			});
 
-		const domain = config.zipline.url;
-		const token = config.zipline.token;
-		const chunkSize = config.zipline.chunkSize * 1024 * 1024;
 		const maxFileSize = config.zipline.maxFileSize;
 
 		const chunked = int.options.getBoolean("chunked") || false;
 		const ephemeral = int.options.getBoolean("ephemeral") || false;
+		const attachment = int.options.getAttachment("file");
+		const text = int.options.getString("text");
+		const password = int.options.getString("password");
+		const overrideDomain = int.options.getString("override-domain");
+		const originalName = int.options.getBoolean("original-name");
+		const expiration = int.options.getString(
+			"expiration",
+		) as ZiplineUploadConfig["expiration"];
+		const maxViews = int.options.getInteger("max-views");
+		const compression = int.options.getInteger("compression");
+		const format = int.options.getString(
+			"format",
+		) as ZiplineUploadConfig["nameFormat"];
+		const folder = int.options.getString("folder");
+		const zeroWidthSpaces = int.options.getBoolean("zero-width-spaces");
+		const embed = int.options.getBoolean("embed");
 		let fileName = int.options.getString("filename");
 
-		const attachment = int.options.getAttachment("file", true);
-		if (!fileName) fileName = attachment.name;
-		const filePath = path.join(__dirname, "../../tmp", fileName);
-
-		if (!fs.existsSync(filePath)) {
-			fs.mkdirSync(path.dirname(filePath), {
-				recursive: true,
+		if (!text && !attachment)
+			return int.reply({
+				content: "You must include one of attachment or text",
+				flags: MessageFlags.Ephemeral,
 			});
-		}
 
-		try {
+		if (expiration && !expirations.includes(expiration as string))
+			return int.reply({
+				content: "Invalid Expiration",
+				flags: MessageFlags.Ephemeral,
+			});
+
+		if (format && !formats.includes(format as string))
+			return int.reply({
+				content: "Invalid Format",
+				flags: MessageFlags.Ephemeral,
+			});
+
+		let blob: Blob;
+
+		await int.deferReply({
+			flags: ephemeral ? MessageFlags.Ephemeral : undefined,
+		});
+
+		const folders = await getZiplineFolders();
+
+		if (folder && !folders.find((fold) => fold.id === folder))
+			return await int.editReply({
+				content: "Invalid Folder",
+			});
+
+		if (attachment) {
 			if (attachment.size > 95 * 1024 * 1024 && !chunked)
 				return await int.reply({
 					content: "Your file is too big, non-chunked files can be max 95mb",
@@ -49,108 +129,53 @@ export default {
 					flags: MessageFlags.Ephemeral,
 				});
 
-			await int.deferReply({
-				flags: ephemeral ? MessageFlags.Ephemeral : undefined,
-			});
+			if (!fileName) fileName = attachment.name;
 
-			const response = await axios.get(attachment.url, {
-				responseType: "arraybuffer",
-			});
-
-			Bun.write(filePath, response.data);
-
-			await int.editReply({
-				content: "File has been downloaded successfully, uploading...",
-			});
-
-			if (attachment.size < 95 * 1024 * 1024) {
-				const file = fs.createReadStream(filePath);
-				const form = new FormData();
-
-				form.append(
-					"file",
-					await streamToBlob(file, attachment.contentType),
-					fileName,
-				);
-
-				const uploadResponse = await axios.post(`${domain}/api/upload`, form, {
-					headers: {
-						Authorization: token,
-						"content-type": "multipart/form-data",
-						Format: "random",
-						Embed: "true",
-						"Original-Name": "true",
-					},
+			try {
+				const response = await axios.get(attachment.url, {
+					responseType: "arraybuffer",
 				});
 
 				await int.editReply({
-					content: `[${fileName}](${uploadResponse.data.files}) has been uploaded\nURL: ${uploadResponse.data.files}`,
+					content: "File has been downloaded successfully, uploading...",
 				});
 
-				fs.unlinkSync(filePath);
-
-				return;
-			}
-
-			const numChunks = Math.ceil(attachment.size / chunkSize);
-
-			function generateRandomString() {
-				return Math.random().toString(36).substring(2, 6);
-			}
-
-			const identifier = generateRandomString();
-
-			for (let i = numChunks - 1; i >= 0; i--) {
-				const start = i * chunkSize;
-				const end = Math.min(start + chunkSize, attachment.size);
-				const chunk = fs.createReadStream(filePath, {
-					start,
-					end,
+				blob = new Blob([response.data], {
+					type: response.headers["content-type"],
 				});
-				const formData = new FormData();
-
-				formData.append(
-					"file",
-					await streamToBlob(chunk, attachment.contentType),
-					fileName,
-				);
-
-				axios
-					.post(`${domain}/api/upload`, formData, {
-						headers: {
-							Authorization: token,
-							"Content-Type": "multipart/form-data",
-							"Content-Range": `bytes ${start}-${end - 1}/${attachment.size}`,
-							"X-Zipline-Partial-Filename": fileName,
-							"X-Zipline-Partial-Lastchunk": i === 0 ? "true" : "false",
-							"X-Zipline-Partial-Identifier": identifier,
-							"X-Zipline-Partial-Mimetype": attachment.contentType,
-							Format: "random",
-							Embed: "true",
-							"Original-Name": "true",
-						},
-					})
-					.then(async (response) => {
-						if (response.data.files) {
-							await int.editReply({
-								content: `[${fileName}](${response.data.files}) has been uploaded\nURL: ${response.data.files}`,
-							});
-
-							fs.unlinkSync(filePath);
-						}
-					})
-					.catch((error) => {
-						console.error(error);
-					});
+			} catch {
+				return int.editReply({
+					content: "Something went wrong while downloading the file...",
+				});
 			}
-		} catch (e) {
-			console.error(e);
+		} else {
+			blob = new Blob([text as string], {
+				type: "text/plain",
+			});
+		}
 
-			await int.editReply({
-				content: "Something went wrong...",
+		const fileData = await uploadToZipline(blob, {
+			filename: fileName,
+			compression,
+			embed,
+			maxViews,
+			folder,
+			originalName,
+			overrideDomain,
+			password,
+			zeroWidthSpaces,
+			text: !!text,
+			nameFormat: format,
+			expiration,
+		});
+
+		if (!fileData)
+			return await int.editReply({
+				content: "Failed to upload the file",
 			});
 
-			fs.unlinkSync(filePath);
-		}
+		await int.editReply({
+			content: `[${fileData.filename}](${fileData.url}) has been uploaded\nURL: ${fileData.url}`,
+		});
 	},
 } as Command;

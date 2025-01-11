@@ -3,7 +3,8 @@
 1. Run `git clone https://github.com/Stef-00012/userApps`.
 2. Open the folder, `cd userApps`.
 3. rename `.env.example` to `.env` and fill the environment variables (See [#Config](https://github.com/Stef-00012/Discord-User-Installed-Apps/#config))
-4. Run `docker compose up -d`.
+4. run `npm run db:setup`
+5. Run `docker compose up -d`.
 
 # Config
 
@@ -15,6 +16,7 @@
 - `ZIPLINE_URL`: Your Zipline hostname. [^1]
 - `ZIPLINE_CHUNK_SIZE`: File chunk size, for chunked uploads (in mb). [^1]
 - `ZIPLINE_MAX_FILE_SIZE`: Max file size (in mb). [^1]
+- `ZIPLINE_VERSION`: Your Zipline Version. [^1]
 
 - `NAVIAC_USERNAME`: Username for the N.A.V.I.A.C. API authentication. [^2]
 - `NAVIAC_TOKEN`: Token for the N.A.V.I.A.C. API authentication. [^2]

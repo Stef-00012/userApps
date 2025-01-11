@@ -12,6 +12,7 @@ export interface ZiplineConfig {
 	url: string;
 	chunkSize: number;
 	maxFileSize: number;
+	version: "v3" | "v4";
 }
 
 export interface NaviacConfig {

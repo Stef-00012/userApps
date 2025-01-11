@@ -1,8 +1,58 @@
+import config from "$config";
 import {
 	ApplicationCommandType,
 	ApplicationCommandOptionType,
 	type APIApplicationCommand,
+	type ApplicationCommandOption,
 } from "discord.js";
+
+const uploadV3Options: Array<ApplicationCommandOption> = [
+	{
+		name: "zero-width-spaces",
+		type: ApplicationCommandOptionType.Boolean,
+		description: "Whether to add zero width spaces to the URL",
+		required: false
+	},
+	{
+		name: "embed",
+		type: ApplicationCommandOptionType.Boolean,
+		description: "Whether to embed the file",
+		required: false
+	}
+]
+
+const uploadV4Options: Array<ApplicationCommandOption> = [
+	{
+		name: "folder",
+		type: ApplicationCommandOptionType.String,
+		autocomplete: true,
+		description: "The folder to upload the file to",
+		required: false
+	},
+]
+
+const uploadOptions = config.zipline?.version === "v3"
+	? uploadV3Options
+	: uploadV4Options;
+
+const shortenV4Options: Array<ApplicationCommandOption> = [
+	{
+		name: "max-views",
+		description: "The maximum views of the URL",
+		type: ApplicationCommandOptionType.Integer,
+		required: false
+	},
+	{
+		name: "password",
+		description: "Password for the URL",
+		type: ApplicationCommandOptionType.String,
+		required: false
+	}
+]
+
+const shortenOptions = config.zipline?.version === "v3"
+? []
+: shortenV4Options;
 
 export default [
 	// slash commands
@@ -576,7 +626,13 @@ export default [
 				name: "file",
 				type: ApplicationCommandOptionType.Attachment,
 				description: "The file to upload",
-				required: true,
+				required: false,
+			},
+			{
+				name: "text",
+				type: ApplicationCommandOptionType.String,
+				description: "The text to upload",
+				required: false,
 			},
 			{
 				name: "filename",
@@ -585,6 +641,72 @@ export default [
 				max_length: 50,
 				required: false,
 			},
+			{
+				name: "password",
+				type: ApplicationCommandOptionType.String,
+				description: "Password for the file",
+				required: false,
+			},
+			{
+				name: "override-domain",
+				type: ApplicationCommandOptionType.String,
+				description: "The domain to use for the URL",
+				required: false
+			},
+			{
+				name: "original-name",
+				type: ApplicationCommandOptionType.Boolean,
+				description: "Whether keep the original name",
+				required: false
+			},
+			{
+				name: "expiration",
+				type: ApplicationCommandOptionType.String,
+				description: "The expiration time of the file",
+				autocomplete: true,
+				required: false,
+			},
+			{
+				name: "max-views",
+				type: ApplicationCommandOptionType.Integer,
+				description: "The maximum views of the file",
+				required: false,
+			},
+			{
+				name: "compression",
+				type: ApplicationCommandOptionType.Integer,
+				description: "The percentage of compression of the file",
+				required: false
+			},
+			{
+				name: "format",
+				type: ApplicationCommandOptionType.String,
+				description: "URL ID format",
+				required: false,
+				choices: [
+					{
+						name: "UUID",
+						value: "uuid"
+					},
+					{
+						name: "Date",
+						value: "date"
+					},
+					{
+						name: "Random",
+						value: "random"
+					},
+					{
+						name: "Name",
+						value: "name"
+					},
+					{
+						name: "Gfycat",
+						value: "gfycat"
+					}
+				]
+			},
+			...uploadOptions,
 			{
 				name: "chunked",
 				description: "Wether to upload the file in chunks",
@@ -618,6 +740,7 @@ export default [
 				description: "Custom vanity URL",
 				required: false,
 			},
+			...shortenOptions,
 			{
 				name: "ephemeral",
 				description: "Wether send an ephemeral reponse",
