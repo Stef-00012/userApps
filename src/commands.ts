@@ -1081,7 +1081,7 @@ export default [
 					},
 					{
 						name: "list",
-						description: "Run a command on your server",
+						description: "List all servers connected to the configured account",
 						type: ApplicationCommandOptionType.Subcommand,
 					},
 				],
