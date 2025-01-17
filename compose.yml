@@ -16,9 +16,9 @@ services:
         image: caronc/apprise:latest
 
     bot:
-        image: stefdp/discord-user-apps
         ports:
             - 3000:3000
+        image: stefdp/discord-user-apps
         container_name: discord-user-apps
         restart: unless-stopped
         env_file:
@@ -28,5 +28,6 @@ services:
         volumes:
             - ./data:/bot/data
             - ./permissions:/bot/src/data/permissions
+            - ./migrations:/bot/drizzle
         depends_on:
             - apprise-api

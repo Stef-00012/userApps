@@ -28,5 +28,6 @@ services:
         volumes:
             - ./data:/bot/data
             - ./permissions:/bot/src/data/permissions
+            - ./migrations:/bot/drizzle
         depends_on:
             - apprise-api
