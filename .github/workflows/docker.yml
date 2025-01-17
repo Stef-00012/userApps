@@ -6,9 +6,13 @@ on:
     paths:
       - "src/**"
       - "Dockerfile"
-      - "config.js"
+      - "config.ts"
+      - "compose.yml"
       - "package.json"
-      - "drizzle.config.js"
+      - "tsconfig.json"
+      - ".dockerignore"
+      - "compose.dev.yml"
+      - "drizzle.config.ts"
       - .github/workflows/docker.yml
 
   workflow_dispatch:
