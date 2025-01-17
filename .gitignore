@@ -10,4 +10,3 @@ bun.lockb
 .env
 tmp.ts
 apprise
-drizzle/
