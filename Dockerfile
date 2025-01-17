@@ -1,4 +1,4 @@
-FROM oven/bun:debian
+FROM imbios/bun-node:latest-22-slim
 
 WORKDIR /bot
 
@@ -19,4 +19,4 @@ COPY . .
 
 RUN bun i
 
-ENTRYPOINT ["bun", "run", "build"]
+ENTRYPOINT ["/bin/bash", "/bot/entrypoint.sh"]

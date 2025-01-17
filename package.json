@@ -8,7 +8,6 @@
 		"db:setup": "npm run db:generate && npm run db:migrate",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
-		"build": "npm run db:setup && bun run start",
 		"start": "bun run src/index.ts",
 		"compose:up": "docker compose up",
 		"compose:down": "docker compose down",
