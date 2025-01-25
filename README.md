@@ -28,7 +28,7 @@
 
 - `DISCORD_CLIENT_ID`: Your Discord bot client ID.
 - `DISCORD_CLIENT_SECRET`: Your Discord bot client secret.
-- `DISCORD_REDIRECT_URI`: Your OAuth2 redirect URI.
+- `DISCORD_REDIRECT_URI`: Your OAuth2 redirect URI. Should end with `/login`.
 
 - `JWT_SECRET`: Your JSON Web Token secret (any string, possibly hard to guess).
 
