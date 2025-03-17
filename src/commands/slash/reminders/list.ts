@@ -1,5 +1,6 @@
 import type { Client } from "&/DiscordClient";
 import { and, eq } from "drizzle-orm";
+import ms from "enhanced-ms";
 import {
 	type ChatInputCommandInteraction,
 	EmbedBuilder,
@@ -28,9 +29,16 @@ export default async function (
 
 	const remindersString = userRemiders
 		.map((reminder) => {
-			const timeUnix = Math.floor(new Date(reminder.date).getTime() / 1000);
+			const lastRun = new Date(reminder.lastRun)
+			const nextRun = new Date(reminder.date || lastRun.getTime() + reminder.interval)
+			const timeUnix = Math.floor(nextRun.getTime() / 1000);
 
-			return `[\`${reminder.reminderId}\`] | <t:${timeUnix}:R> - ${reminder.description}`;
+			const repeatAmount = reminder.repeat ?? 1
+			const repetitions = reminder.repetitions ?? 0
+
+			return `[\`${reminder.reminderId}\`] | ${(reminder.date || repeatAmount === 1) ? "" : "Next Run: "}<t:${timeUnix}:R> - ${reminder.description}${(reminder.date || repeatAmount === 1) ? "" : ` | Repeated every ${ms(reminder.interval, {
+				shortFormat: true
+			})} (${repeatAmount === 0 ? "Unlimited" : `${repetitions}/${repeatAmount}`} runs)`}`;
 		})
 		.join("\n- ");
 

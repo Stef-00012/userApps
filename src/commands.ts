@@ -975,6 +975,12 @@ export default [
 						type: ApplicationCommandOptionType.String,
 						required: true,
 					},
+					{
+						name: "repeat",
+						description: "How many times repwat the reminder, 0 = unlimited",
+						type: ApplicationCommandOptionType.Integer,
+						required: false
+					}
 				],
 			},
 			{
@@ -1081,7 +1087,7 @@ export default [
 					},
 					{
 						name: "list",
-						description: "Run a command on your server",
+						description: "List all your pterodactyl servers",
 						type: ApplicationCommandOptionType.Subcommand,
 					},
 				],

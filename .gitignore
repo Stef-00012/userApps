@@ -11,3 +11,4 @@ bun.lockb
 tmp.ts
 apprise
 drizzle/
+migrations/

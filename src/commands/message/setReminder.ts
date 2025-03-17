@@ -41,14 +41,26 @@ export default {
 			.setMinLength(3)
 			.setMaxLength(7);
 
+		const repeatAmount = new TextInputBuilder()
+			.setLabel("Repeat")
+			.setPlaceholder("How many times repeat this reminder, 0 = unlimited")
+			.setCustomId("repeat")
+			.setStyle(TextInputStyle.Short)
+			.setRequired(true)
+			.setMinLength(1)
+			.setValue("1");
+
 		const timeRow = new ActionRowBuilder<TextInputBuilder>().addComponents([
 			timeInput,
 		]);
 		const typeRow = new ActionRowBuilder<TextInputBuilder>().addComponents([
 			typeInput,
 		]);
+		const repeatAmountRow = new ActionRowBuilder<TextInputBuilder>().addComponents([
+			repeatAmount
+		])
 
-		modal.addComponents([timeRow, typeRow]);
+		modal.addComponents([timeRow, typeRow, repeatAmountRow]);
 
 		await int.showModal(modal);
 
@@ -62,10 +74,16 @@ export default {
 			.then(async (mainModalInteraction) => {
 				const time = mainModalInteraction.fields.getTextInputValue("time");
 				let type = mainModalInteraction.fields.getTextInputValue("type");
+				const repeat = Number.parseInt(mainModalInteraction.fields.getTextInputValue("repeat"));
 
 				if (["content", "url"].every((x) => type !== x)) type = "content";
 
 				const msTime: number = ms(time);
+
+				if (Number.isNaN(repeat)) return await mainModalInteraction.reply({
+					content: "Repeat must be a number",
+					flags: MessageFlags.Ephemeral,
+				});
 
 				if (!msTime || msTime < 30000)
 					return await mainModalInteraction.reply({
@@ -128,6 +146,7 @@ export default {
 								reminder,
 								msTime,
 								reminderId,
+								repeat
 							);
 
 							return await buttonInteraction.editReply({
@@ -178,6 +197,7 @@ export default {
 									reminder,
 									msTime,
 									reminderId,
+									repeat
 								);
 
 								return await contentModalInteraction.editReply({
@@ -227,6 +247,7 @@ export default {
 					reminder,
 					msTime,
 					reminderId,
+					repeat
 				);
 
 				return await mainModalInteraction.editReply({
@@ -278,6 +299,7 @@ async function addReminder(
 	reminder: string,
 	time: number,
 	reminderId: string,
+	repeat?: number,
 ): Promise<void> {
 	const remindersSchema = client.dbSchema.reminders;
 
@@ -285,6 +307,8 @@ async function addReminder(
 		userId: int.user.id,
 		reminderId,
 		description: reminder,
-		date: new Date(Date.now() + time).toISOString(),
+		lastRun: new Date().toISOString(),
+		interval: time,
+		repeat
 	});
 }

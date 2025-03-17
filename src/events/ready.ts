@@ -13,13 +13,20 @@ export default async function (client: Client) {
 
 	const remindersSchema = client.dbSchema.reminders;
 
-	setInterval(async () => {
+	checkReminders()
+
+	setInterval(checkReminders, 30000);
+
+	async function checkReminders() {
 		const reminders = await client.db.query.reminders.findMany();
 
 		for (const reminder of reminders) {
-			const reminderDate = new Date(reminder.date);
+			const lastRun = new Date(reminder.lastRun)
+			const nextRun = new Date(reminder.date || lastRun.getTime() + reminder.interval)
+			let reminderRepetitions = reminder.repetitions ?? 0
+			const repeatAmount = reminder.repeat ?? 1
 
-			if (Date.now() > reminderDate.getTime()) {
+			if (Date.now() > nextRun.getTime()) {
 				try {
 					const user = await client.users.fetch(reminder.userId);
 
@@ -42,7 +49,9 @@ export default async function (client: Client) {
 						embeds: [embed],
 					});
 
-					await client.db
+					reminderRepetitions++;
+
+					if (repeatAmount > 0 && reminderRepetitions >= repeatAmount) return await client.db
 						.delete(remindersSchema)
 						.where(
 							and(
@@ -50,6 +59,19 @@ export default async function (client: Client) {
 								eq(remindersSchema.userId, reminder.userId),
 							),
 						);
+
+					await client.db
+						.update(client.dbSchema.reminders)
+						.set({
+							repetitions: reminderRepetitions,
+							lastRun: new Date().toISOString()
+						})
+						.where(
+							and(
+								eq(client.dbSchema.reminders.userId, reminder.userId),
+								eq(client.dbSchema.reminders.reminderId, reminder.reminderId)
+							)
+						)
 				} catch (e) {
 					console.log(e);
 
@@ -64,7 +86,7 @@ export default async function (client: Client) {
 				}
 			}
 		}
-	}, 30000);
+	}
 
 	const commands = await client.application?.commands.fetch();
 

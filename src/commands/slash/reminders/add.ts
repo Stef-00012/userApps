@@ -10,6 +10,7 @@ export default async function (
 ) {
 	const time = int.options.getString("time", true);
 	const reason = int.options.getString("reason", true);
+	const repeatAmount = int.options.getInteger("repeat") ?? 1;
 
 	const msTime: number = ms(time);
 
@@ -39,7 +40,9 @@ export default async function (
 		userId: int.user.id,
 		reminderId,
 		description: reason,
-		date: new Date(Date.now() + msTime).toISOString(),
+		lastRun: new Date().toISOString(),
+		interval: msTime,
+		repeat: repeatAmount
 	});
 
 	return await int.editReply({
