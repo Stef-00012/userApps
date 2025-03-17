@@ -977,7 +977,7 @@ export default [
 					},
 					{
 						name: "repeat",
-						description: "How many times repwat the reminder, 0 = unlimited",
+						description: "How many times repeat the reminder, 0 = unlimited",
 						type: ApplicationCommandOptionType.Integer,
 						required: false
 					}
