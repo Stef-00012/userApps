@@ -2,6 +2,7 @@ export interface Config {
 	token: string;
 	owners: Array<string>;
 	public: boolean;
+	autoUpdateAvatar: string | boolean;
 	zipline?: ZiplineConfig;
 	naviac?: NaviacConfig;
 	web?: WebConfig;

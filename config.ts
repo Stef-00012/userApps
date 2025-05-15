@@ -4,6 +4,12 @@ export default {
 	token: process.env["BOT_TOKEN"],
 	owners: process.env["OWNERS"]?.split(",") || [],
 	public: process.env["PUBLIC"] === "true",
+	autoUpdateAvatar:
+		process.env["AUTO_UPDATE_AVATAR"] === "true"
+			? true
+			: process.env["AUTO_UPDATE_AVATAR"] === "false"
+				? false
+				: process.env["AUTO_UPDATE_AVATAR"] || false,
 
 	zipline: {
 		token: process.env["ZIPLINE_TOKEN"],

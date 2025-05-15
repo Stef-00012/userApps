@@ -1228,6 +1228,21 @@ export default [
 		integration_types: [0, 1],
 		contexts: [0, 1, 2],
 	},
+	{
+		name: "setavatar",
+		description: "Change the bot's avatar",
+		type: ApplicationCommandType.ChatInput,
+		integration_types: [0, 1],
+		contexts: [0, 1, 2],
+		options: [
+			{
+				name: "avatar",
+				type: ApplicationCommandOptionType.String,
+				description: "The new avatar URL",
+				required: false,
+			},
+		],
+	},
 
 	// message commands
 	{

@@ -10,9 +10,9 @@ services:
             - APPRISE_WORKER_COUNT=1
             - APPRISE_DEFAULT_THEME=dark
         volumes:
-            - ./apprise/config:/config
-            - ./apprise/plugin:/plugin
-            - ./apprise/attach:/attach
+            - ./apprise/config:/config:z
+            - ./apprise/plugin:/plugin:z
+            - ./apprise/attach:/attach:z
         image: caronc/apprise:latest
 
     bot:
@@ -26,8 +26,8 @@ services:
         environment:
             - APPRISE_URL=http://apprise-api:8000
         volumes:
-            - ./data:/bot/data
-            - ./permissions:/bot/src/data/permissions
-            - ./migrations:/bot/drizzle
+            - ./data:/bot/data:z
+            - ./permissions:/bot/src/data/permissions:z
+            - ./migrations:/bot/drizzle:z
         depends_on:
             - apprise-api
