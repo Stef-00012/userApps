@@ -11,6 +11,7 @@
 - `BOT_TOKEN`: Your Discord bot token.
 - `OWNERS`: An list of Discord users allowed to use owner-only commands (split by `,`). Example: `123,456,789`.
 - `PUBLIC`: Whether the bot is public, if so, when the web is enabled, a `/invite` route is created that redirects to the bot's invite.
+- `AUTO_UPDATE_AVATAR`: An user ID or a boolean (when `true`, it defaults to the first owner ID).
 
 - `ZIPLINE_TOKEN`: Your Zipline token. [^1]
 - `ZIPLINE_URL`: Your Zipline hostname. [^1]
