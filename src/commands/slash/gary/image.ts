@@ -10,7 +10,7 @@ export default async function (
 	await int.deferReply();
 
 	try {
-		const res = await axios.get("https://garybot.dev/api/gary");
+		const res = await axios.get("https://api.garythe.cat/gary");
 
 		const url: string = res.data.url;
 

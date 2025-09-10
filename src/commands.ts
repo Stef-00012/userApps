@@ -836,28 +836,28 @@ export default [
 				type: ApplicationCommandOptionType.String,
 				description: "DNS provider to use",
 				required: false,
-				choices: [
-					{
-						name: "1.1.1.1 (Cloudflare)",
-						value: "1.1.1.1",
-					},
-					{
-						name: "1.1.1.2 (Cloudflare Malware Blocking)",
-						value: "1.1.1.2",
-					},
-					{
-						name: "1.1.1.3 (Cloudflare Malware Blocking + Adult Content Blocking)",
-						value: "1.1.1.3",
-					},
-					{
-						name: "8.8.8.8 (Google)",
-						value: "8.8.8.8",
-					},
-					{
-						name: "9.9.9.9 (Quad9)",
-						value: "9.9.9.9",
-					},
-				],
+				// choices: [
+				// 	{
+				// 		name: "1.1.1.1 (Cloudflare)",
+				// 		value: "1.1.1.1",
+				// 	},
+				// 	{
+				// 		name: "1.1.1.2 (Cloudflare Malware Blocking)",
+				// 		value: "1.1.1.2",
+				// 	},
+				// 	{
+				// 		name: "1.1.1.3 (Cloudflare Malware Blocking + Adult Content Blocking)",
+				// 		value: "1.1.1.3",
+				// 	},
+				// 	{
+				// 		name: "8.8.8.8 (Google)",
+				// 		value: "8.8.8.8",
+				// 	},
+				// 	{
+				// 		name: "9.9.9.9 (Quad9)",
+				// 		value: "9.9.9.9",
+				// 	},
+				// ],
 			},
 			{
 				name: "cdflag",

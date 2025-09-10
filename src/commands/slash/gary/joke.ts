@@ -9,7 +9,7 @@ export default async function (
 	await int.deferReply();
 
 	try {
-		const res = await axios.get("https://garybot.dev/api/joke");
+		const res = await axios.get("https://api.garythe.cat/joke");
 
 		const joke: string = res.data.joke;
 
